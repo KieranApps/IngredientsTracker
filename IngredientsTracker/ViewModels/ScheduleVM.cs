@@ -29,16 +29,28 @@ namespace IngredientsTracker.ViewModels
             _db = db;
 
             CalendarDays = new ObservableCollection<CalendarDay>();
-
+            // Get Current month and year for params
+            DateTime today = DateTime.Today;
+            GetDishSchedule(today);
+    
             // Can expand to each month, i.e., January, Februrary etc.. rather than now + 30 days
-            for (int i = 1; i <= 30; i++) // Generate a sample month
-            {
-                CalendarDays.Add(new CalendarDay
-                {
-                    Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i),
-                    Dish = "Dish number " + i
-                });
-            }
+            //for (int i = 1; i <= 30; i++) // Generate a sample month
+            //{
+            //    CalendarDays.Add(new CalendarDay
+            //    {
+            //        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i),
+            //        Dish = "Dish number " + i
+            //    });
+            //}
+        }
+
+        // This function will be used for setting the month shown on the calendar as well as getting the dishes for that month
+        // So takes month/date as a param
+        public async Task GetDishSchedule(DateTime date)
+        {
+            // Get Current Month
+
+
         }
     }
 }
