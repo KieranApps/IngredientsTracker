@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IngredientsTracker.DishList"
+             xmlns:viewmodel="clr-namespace:IngredientsTracker.ViewModels"
+             Title="DishList">
+    <!-- Bind the page to the ViewModel -->
+    <ContentPage.BindingContext>
+        <viewmodel:DishListVM />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout>
+        <Label
+            HorizontalTextAlignment="Center"
+            Text="View, add and edit your dishes"
+            Padding="0,0,0,20"
+            FontFamily="Verdana" FontSize="20"
+            TextColor="#585858"
+        />
+        <Grid
+            ColumnSpacing="10"
+            Padding="15,0,15,20"
+        >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.75*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Entry
+                Grid.Column="0"
+                TextColor="Black"
+                Text="{Binding NewDishName}"
+                Placeholder="Enter dish name"
+                PlaceholderColor="DarkGray"
+            />
+            <Button
+                Grid.Column="1"
+                TextColor="White"
+                BackgroundColor="LightBlue"
+                FontAttributes="Bold"
+                Text="Submit"
+                Command="{Binding SubmitDishCommand}">
+                <Button.Shadow>
+                    <Shadow Brush="LightBlue"
+                        Offset="0,0"
+                        Radius="40"
+                        Opacity="0.7"/>
+                </Button.Shadow>
+            </Button>
+        </Grid>
+        <CollectionView ItemsSource="{Binding Dishes}" HeightRequest="600" > <!-- Potentially can dynamicall set the HeightRequest with a Binding to a variable in BE code that saves the device screen dimentions -->
+            <!-- Might also be worth looking into any other layours, maybe grids can work with bindings and such -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout
+                        Padding="0, 5, 0, 5">
+                        <SwipeView>
+                            <!-- Define Swipe Items for the Right Swipe -->
+                            <SwipeView.RightItems>
+                                <SwipeItems Mode="Reveal">
+                                    <!-- Edit Button -->
+                                    <SwipeItem 
+                                Text="Edit" 
+                                BackgroundColor="LightGreen" 
+                                IconImageSource="edit_icon.png" 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DishListVM}}, Path=ShowDishDetailsCommand}" 
+                                CommandParameter="{Binding .}" />
+                                    <!-- Delete Button -->
+                                    <SwipeItem 
+                                Text="Delete" 
+                                BackgroundColor="LightCoral" 
+                                IconImageSource="delete_icon.png" 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DishListVM}}, Path=DeleteDishCommand}"
+                                CommandParameter="{Binding .}" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Frame
+                                BorderColor="LightBlue"
+                                HasShadow="True"
+                                CornerRadius="0"
+                                Grid.Column="0"
+                            >
+                                <Label
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding Name}"
+                                    FontFamily="Verdana" FontSize="20"
+                                    TextColor="#585858"
+                                />
+                                
+                            </Frame>
+                        </SwipeView>
+                        <Button Text="Edit" Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:DishListVM}}, Path=ShowDishDetailsCommand}" 
+CommandParameter="{Binding .}"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>
