@@ -81,5 +81,12 @@ namespace IngredientsTracker.Database
         {
             return _database.Table<IngredientDishModel>().Where(x => x.Id == id).FirstOrDefaultAsync();
         }
+
+        public Task<Schedule> GetDishForDayScheduled(int year, int month, int monthLength)
+        {
+            DateTime start = new DateTime(year, month, 1);
+            DateTime end = new DateTime(year, month, monthLength);
+            return _database.Table<Schedule>().Where(x => x.Date > start && x.Date < end).FirstOrDefaultAsync();
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,26 +32,31 @@ namespace IngredientsTracker.ViewModels
             CalendarDays = new ObservableCollection<CalendarDay>();
             // Get Current month and year for params
             DateTime today = DateTime.Today;
-            GetDishSchedule(today);
-    
-            // Can expand to each month, i.e., January, Februrary etc.. rather than now + 30 days
-            //for (int i = 1; i <= 30; i++) // Generate a sample month
-            //{
-            //    CalendarDays.Add(new CalendarDay
-            //    {
-            //        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, i),
-            //        Dish = "Dish number " + i
-            //    });
-            //}
+            GetDishScheduleForMonth(today);
         }
 
         // This function will be used for setting the month shown on the calendar as well as getting the dishes for that month
         // So takes month/date as a param
-        public async Task GetDishSchedule(DateTime date)
+        public async Task GetDishScheduleForMonth(DateTime date)
         {
             // Get Current Month
+            int monthLength = DateTime.DaysInMonth(date.Year, date.Month);
 
+            var dishScheduledForMonth = await _db.GetDishForDayScheduled(date.Year, date.Month, monthLength);
+                
+            for (int i = 1; i <= monthLength; i++)
+            {
+                // Get dish
+                DateTime dishDate = new DateTime(date.Year, date.Month, i);
+                
+                // Find current day in dishScheduledForMonth (if exists) and add to CalendarDays
 
+                CalendarDays.Add(new CalendarDay
+                {
+                    Date = new DateTime(date.Year, date.Month, i), // Update to use
+                    Dish = dishScheduledForMonth.DishId.ToString() // Dish = "Dish: " + i
+                });
+            }
         }
     }
 }
