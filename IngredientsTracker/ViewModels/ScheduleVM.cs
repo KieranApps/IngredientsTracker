@@ -43,19 +43,39 @@ namespace IngredientsTracker.ViewModels
             int monthLength = DateTime.DaysInMonth(date.Year, date.Month);
 
             var dishScheduledForMonth = await _db.GetDishForDayScheduled(date.Year, date.Month, monthLength);
-                
+            if (dishScheduledForMonth == null)
+            {
+                // Whole month is empty
+                for (int i = 1; i <= monthLength; i++)
+                {
+                    CalendarDays.Add(new CalendarDay
+                    {
+                        Date = new DateTime(date.Year, date.Month, i), // Update to use
+                        Dish = "Dish: " + i
+                    });
+                }
+                return;
+            }
             for (int i = 1; i <= monthLength; i++)
             {
                 // Get dish
                 DateTime dishDate = new DateTime(date.Year, date.Month, i);
                 
                 // Find current day in dishScheduledForMonth (if exists) and add to CalendarDays
-
-                CalendarDays.Add(new CalendarDay
+                // Will have to loop through manually as its a custom type
+                foreach (var el in dishScheduledForMonth)
                 {
-                    Date = new DateTime(date.Year, date.Month, i), // Update to use
-                    Dish = dishScheduledForMonth.DishId.ToString() // Dish = "Dish: " + i
-                });
+                    if ()
+                    {
+
+                    }
+                    CalendarDays.Add(new CalendarDay
+                    {
+                        Date = new DateTime(date.Year, date.Month, i), // Update to use
+                        Dish = el.DishId.ToString() // Dish = "Dish: " + i
+                    });
+
+                }
             }
         }
     }
