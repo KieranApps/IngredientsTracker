@@ -5,7 +5,8 @@
              Title="CreateAccount">
     <VerticalStackLayout>
         <Label 
-            Text="Welcome to .NET MAUI!"
+            Text="Create your account!"
+            FontSize="30"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
     </VerticalStackLayout>

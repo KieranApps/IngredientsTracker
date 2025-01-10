@@ -6,6 +6,7 @@ namespace IngredientsTracker
 {
     public partial class MainPage : ContentPage
     {
+
         private readonly ApiService _api;
 
         public MainPage(ApiService api)
@@ -34,18 +35,20 @@ namespace IngredientsTracker
             if (isValid)
             {
                 //Skip the login screen
-                await Navigation.PushAsync(new HomePage());
+                await Navigation.PushAsync(new HomePage()); // Edit for DI
             }
         }
 
         private void ViewCreateAccount(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new CreateAccount());
+            var createAccount = App.ServiceProvider.GetService<CreateAccount>();
+            Navigation.PushAsync(createAccount);
         }
 
         private void ViewLogin(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new Login());
+            var login = App.ServiceProvider.GetService<Login>();
+            Navigation.PushAsync(login); // Edit for DI
         }
     }
 
