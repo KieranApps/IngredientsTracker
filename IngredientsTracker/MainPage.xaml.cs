@@ -1,37 +1,51 @@
 ﻿using IngredientsTracker.Database;
+using IngredientsTracker.Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace IngredientsTracker
 {
     public partial class MainPage : ContentPage
     {
-        private readonly Database.Database _db;
+        private readonly ApiService _api;
 
-        public MainPage(Database.Database db)
+        public MainPage(ApiService api)
         {
             InitializeComponent();
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "app.db");
-            _db = db;
-        }
-        
-        private void ViewDishesList(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new DishList(_db));
+            _api = api;
+
+            LoadTokensAndCheckSession();
         }
 
-        private void ViewAllIngredients(object sender, EventArgs e)
+        public async void LoadTokensAndCheckSession()
         {
-            Navigation.PushAsync(new IngredientsList(_db));
-        }
-    
-        private void ViewSchedule(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new Schedule(_db));
+            TokenHandler tokenHandler = new TokenHandler();
+            string refreshToken = await tokenHandler.GetRefreshToken();
+            string accessToken = await tokenHandler.GetAccessToken();
+            if (refreshToken == null) // We dont have refresh token so login
+            {
+                // Delete all tokens to ensure all is empty
+                tokenHandler.DeleteRefreshToken();
+                tokenHandler.DeleteAccessToken();
+                return;
+            }
+            // Check refresh token is valid
+            bool isValid = await _api.CheckTokensAreValid(refreshToken, accessToken);
+
+            if (isValid)
+            {
+                //Skip the login screen
+                await Navigation.PushAsync(new HomePage());
+            }
         }
 
-        private void ViewShoppingList(object sender, EventArgs e)
+        private void ViewCreateAccount(object sender, EventArgs e)
         {
-            //Navigation.PushAsync(new ShoppingList(_db));
+            Navigation.PushAsync(new CreateAccount());
+        }
+
+        private void ViewLogin(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new Login());
         }
     }
 

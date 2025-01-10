@@ -15,36 +15,20 @@
             />
 
             <Button
-                x:Name="ViewDishesListButton"
-                Text="View Dishes" 
-                SemanticProperties.Hint="View Dishes"
-                Clicked="ViewDishesList"
+                x:Name="CreateAccountButton"
+                Text="Create Account" 
+                SemanticProperties.Hint="Create Account"
+                Clicked="ViewCreateAccount"
                 HorizontalOptions="Fill"
             />
-
-            <Button 
-                x:Name="ViewAllIngredientsButton"
-                Text="View Ingredients"
-                SemanticProperties.Hint="View All Ingredients"
-                Clicked="ViewAllIngredients"
+            <Button
+                x:Name="LoginButton"
+                Text="Login" 
+                SemanticProperties.Hint="Login"
+                Clicked="ViewLogin"
                 HorizontalOptions="Fill"
             />
-
-            <Button 
-                x:Name="ViewScheduleButton"
-                Text="View Schedule"
-                SemanticProperties.Hint="View Schedule"
-                Clicked="ViewSchedule"
-                HorizontalOptions="Fill"
-            />
-
-            <Button 
-                x:Name="ViewShoppingListButton"
-                Text="View Shopping List"
-                SemanticProperties.Hint="View Shopping List"
-                Clicked="ViewShoppingList"
-                HorizontalOptions="Fill"
-            />  
+            
         </VerticalStackLayout>
     </ScrollView>
 

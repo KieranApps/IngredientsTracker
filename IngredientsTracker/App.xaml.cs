@@ -4,16 +4,18 @@ namespace IngredientsTracker
 {
     public partial class App : Application
     {
-        private readonly Database.Database _db;
+        public static IServiceProvider ServiceProvider { get; set; }
         public App()
         {
             InitializeComponent();
-            this.UserAppTheme = AppTheme.Light;
+            //this.UserAppTheme = AppTheme.Light;
+            var mainPage = ServiceProvider.GetService<MainPage>();
+            MainPage = new NavigationPage(mainPage);
 
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "app.db");
-            _db = new Database.Database(dbPath);
 
-            MainPage = new NavigationPage(new MainPage(_db));
+            // How to get other pages from witihin the MainPage and onwards...
+            //var secondPage = App.Current.Services.GetService<SecondPage>();
+            //await Navigation.PushAsync(secondPage);
         }
     }
 }
