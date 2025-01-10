@@ -21,7 +21,6 @@ namespace IngredientsTracker
         {
             TokenHandler tokenHandler = new TokenHandler();
             string refreshToken = await tokenHandler.GetRefreshToken();
-            string accessToken = await tokenHandler.GetAccessToken();
             if (refreshToken == null) // We dont have refresh token so login
             {
                 // Delete all tokens to ensure all is empty
@@ -30,7 +29,7 @@ namespace IngredientsTracker
                 return;
             }
             // Check refresh token is valid
-            bool isValid = await _api.CheckTokensAreValid(refreshToken, accessToken);
+            bool isValid = await _api.CheckTokensAreValid(refreshToken);
 
             if (isValid)
             {
@@ -48,7 +47,7 @@ namespace IngredientsTracker
         private void ViewLogin(object sender, EventArgs e)
         {
             var login = App.ServiceProvider.GetService<Login>();
-            Navigation.PushAsync(login); // Edit for DI
+            Navigation.PushAsync(login);
         }
     }
 
