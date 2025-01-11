@@ -2,11 +2,42 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="IngredientsTracker.Login"
+             xmlns:viewmodel="clr-namespace:IngredientsTracker.ViewModels"
              Title="Login">
+    <!-- Bind the page to the ViewModel -->
+    <ContentPage.BindingContext>
+        <viewmodel:LoginVM />
+    </ContentPage.BindingContext>
     <VerticalStackLayout>
         <Label 
             Text="Login!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+        <Entry
+            Grid.Row="0"
+            Grid.Column="0"
+            TextColor="Black"
+            Text="{Binding Email}"
+            Placeholder="Email"
+            PlaceholderColor="DarkGray"
+        />
+        <Entry
+            Grid.Row="1"
+            Grid.Column="0"
+            TextColor="Black"
+            Text="{Binding Password}"
+            Placeholder="Password"
+            IsPassword="True"
+            PlaceholderColor="DarkGray"
+        />
+
+        <Button
+            x:Name="LoginButton"
+            Text="Login" 
+            SemanticProperties.Hint="Login"
+            Command="{Binding LoginCommand}"
+            HorizontalOptions="Fill"
+        />
     </VerticalStackLayout>
 </ContentPage>

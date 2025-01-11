@@ -18,17 +18,10 @@ namespace IngredientsTracker
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-            // Load host
-            var assembly = Assembly.GetExecutingAssembly();
-            using Stream stream = assembly.GetManifestResourceStream("IngredientsTracker.Resources.config.json");
-            using StreamReader reader = new StreamReader(stream);
-            string json = reader.ReadToEnd();
-
-            var configData = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
 
             builder.Services.AddHttpClient("ApiService", client =>
             {
-                client.BaseAddress = new Uri(configData["ApiHost"]);
+                // client.BaseAddress = new Uri(configData["ApiHost"]);
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
             builder.Services.AddSingleton<ApiService>();
