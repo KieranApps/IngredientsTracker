@@ -8,6 +8,7 @@ public partial class Login : ContentPage
     public Login()
 	{
 		InitializeComponent();
-        BindingContext = new LoginVM();
+        var loginVM = App.ServiceProvider.GetService<LoginVM>();
+        BindingContext = loginVM;
     }
 }

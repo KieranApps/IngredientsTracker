@@ -29,7 +29,10 @@ namespace IngredientsTracker
             builder.Services.AddSingleton<MainPage>();
 
             builder.Services.AddTransient<CreateAccount>();
+
+
             builder.Services.AddTransient<Login>();
+            builder.Services.AddTransient<LoginVM>();
             
             //builder.Services.AddSingleton<HomePage>();
 

@@ -43,5 +43,26 @@ namespace IngredientsTracker.Helpers
 
             return true;
         }
+
+        public async Task<string> Login(string email, string password)
+        {
+            Uri uri = new Uri(host + "/user/login");
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", refreshToken); // Headers + tokens not needed for login
+            var body = new
+            {
+                email = email,
+                password = password
+            };
+            string payload = JsonSerializer.Serialize(body);
+            request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode) 
+            {
+                return "{success: false}";
+            }
+            string responseData = await response.Content.ReadAsStringAsync();
+            return responseData;
+        }
     }
 }
