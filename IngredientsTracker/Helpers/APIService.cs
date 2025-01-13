@@ -30,6 +30,7 @@ namespace IngredientsTracker.Helpers
             host = configData["ApiHost"];
         }
 
+        // TODO: Finish off this function and add API to server
         public async Task<bool> CheckTokensAreValid(string refreshToken) // Purely valid on the server/in date. Already been read in the app storage
         {
             // Just check refresh throught the refresh endpoint

@@ -34,7 +34,10 @@ namespace IngredientsTracker
             if (isValid)
             {
                 //Skip the login screen
-                await Navigation.PushAsync(new HomePage()); // Edit for DI
+                // Remove history so you cant go back to log in screen
+                var homePage = App.ServiceProvider.GetService<HomePage>();
+                await Navigation.PushAsync(homePage);
+                Navigation.RemovePage(this);
             }
         }
 

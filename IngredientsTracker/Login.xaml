@@ -20,6 +20,7 @@
             TextColor="Black"
             Text="{Binding Email}"
             Placeholder="Email"
+            Keyboard="Plain"
             PlaceholderColor="DarkGray"
         />
         <Entry
@@ -36,7 +37,7 @@
             x:Name="LoginButton"
             Text="Login" 
             SemanticProperties.Hint="Login"
-            Command="{Binding LoginCommand}"
+            Clicked="HandleLoginClick"
             HorizontalOptions="Fill"
         />
     </VerticalStackLayout>

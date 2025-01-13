@@ -42,7 +42,7 @@ namespace IngredientsTracker.ViewModels
         public ICommand LoginCommand => new Command(async () => await Login());
 
 
-        private async Task Login()
+        public async Task<bool> Login()
         {
             Debug.WriteLine("TESTING");
             if (_email == null) { }
@@ -55,7 +55,7 @@ namespace IngredientsTracker.ViewModels
             {
                 Debug.WriteLine("Error Logging in");
                 // Set error true, to show error text on input screen
-                return;
+                return false;
             }
             string refreshToken = (string)responseData["tokens"]["refreshToken"];
             string accessToken = (string)responseData["tokens"]["accessToken"];
@@ -67,7 +67,7 @@ namespace IngredientsTracker.ViewModels
             await tokenHandler.SaveRefreshToken(refreshToken);
             await tokenHandler.SaveAccessToken(accessToken);
             var homePage = App.ServiceProvider.GetService<HomePage>();
-            Navigation.PushAsync(homePage); // Sort out navigation
+            return true;
         }
     }   
 }
