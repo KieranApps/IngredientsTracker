@@ -1,8 +1,5 @@
 ﻿using IngredientsTracker.Helpers;
 using IngredientsTracker.ViewModels;
-using Microsoft.Extensions.Logging;
-using System.Reflection;
-using System.Text.Json;
 
 namespace IngredientsTracker
 {

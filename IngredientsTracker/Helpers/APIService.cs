@@ -16,6 +16,27 @@ namespace IngredientsTracker.Helpers
         private readonly TokenHandler _tokenHandler;
         string host;
 
+
+        /**
+         * function foo(...params)
+         * call api
+         * if 401
+         *     Do token auth checks, log out if needed (i.e., the refresh is bad too)
+         *     if tokenCheck == 401: log out (delete tokens and navigate to main page via function in code-behind and remove all history
+         *     // Nav to main page and delete all history like this:
+         *         var mainPage = App.ServiceProvider.GetService<MainPage>();
+         *         App.Current.MainPage = new NavigationPage(mainPage); // i.e., we create a NEW navigation page and stack/history
+         *         // ^^ This is the SAME as is in Login.xaml.cs
+         *     else continue below...
+         *     Save tokens
+         *     // Will only retry if tokens HAVE been refreshed and saved. So there should be NO auth issue and 401
+         *     // if refersh is also un auth, we check that in here, and if IS, then log out
+         *     // So both tokens are checked. First access then refresh. If both un auth, log out.
+         *     // i.e., if access un auth, try refresh, if refresh un auth, log out
+         *     call same api and re assign the response (since not a const
+         * The recursive bit will be in the VMs
+         */
+
         public ApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;

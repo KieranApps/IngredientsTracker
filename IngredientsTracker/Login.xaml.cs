@@ -20,10 +20,7 @@ public partial class Login : ContentPage
         if (loggedIn)
         {
             var homePage = App.ServiceProvider.GetService<HomePage>();
-            var mainPage = App.ServiceProvider.GetService<MainPage>();
-            await Navigation.PushAsync(homePage);
-            Navigation.RemovePage(mainPage);
-            Navigation.RemovePage(this);
+            App.Current.MainPage = new NavigationPage(homePage);
         }
         else {
             // Show error
