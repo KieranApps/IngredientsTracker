@@ -8,7 +8,7 @@ namespace IngredientsTracker
         public App()
         {
             InitializeComponent();
-            //this.UserAppTheme = AppTheme.Light;
+            this.UserAppTheme = AppTheme.Light;
 
             var mainPage = ServiceProvider.GetService<MainPage>();
             MainPage = new NavigationPage(mainPage);

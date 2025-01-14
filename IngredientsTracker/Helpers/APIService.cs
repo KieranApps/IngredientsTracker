@@ -52,7 +52,8 @@ namespace IngredientsTracker.Helpers
         }
 
         // TODO: Finish off this function and add API to server
-        public async Task<bool> CheckTokensAreValid(string refreshToken) // Purely valid on the server/in date. Already been read in the app storage
+        // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
+        public async Task<bool> CheckTokensAreValidOnBoot(string refreshToken) // Purely valid on the server/in date. Already been read in the app storage
         {
             // Just check refresh throught the refresh endpoint
             // If refresh valid, just renew access regardless. If not, return false and stay in log in screen
@@ -62,6 +63,13 @@ namespace IngredientsTracker.Helpers
             var response = await _httpClient.SendAsync(request);
             Debug.WriteLine(response);
             // Check status code and response. Will depend if we need to log out to force new session or update saved etc...
+
+            return true;
+        }
+
+        public async Task<bool> RefreshTokens()
+        {
+            string refreshToken = await _tokenHandler.GetRefreshToken();
 
             return true;
         }
@@ -83,6 +91,28 @@ namespace IngredientsTracker.Helpers
             {
                 return "{success: false}";
             }
+            string responseData = await response.Content.ReadAsStringAsync();
+            return responseData;
+        }
+
+        public async Task<string> CreateAccount(string name, string email, string password)
+        {
+            Uri uri = new Uri(host + "/user/create-account");
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            var body = new
+            {
+                name = name,
+                email = email,
+                password = password
+            };
+            string payload = JsonSerializer.Serialize(body);
+            request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+            var response = await _httpClient.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                return "{success: false}";
+            }
+
             string responseData = await response.Content.ReadAsStringAsync();
             return responseData;
         }

@@ -1,5 +1,4 @@
 using IngredientsTracker.ViewModels;
-using System.Diagnostics;
 
 namespace IngredientsTracker;
 
@@ -24,6 +23,7 @@ public partial class Login : ContentPage
         }
         else {
             // Show error
+            errorMessage.IsVisible = true;
         }
     }
 }

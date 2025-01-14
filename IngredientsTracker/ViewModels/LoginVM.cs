@@ -39,12 +39,8 @@ namespace IngredientsTracker.ViewModels
             _api = api;
         }
 
-        public ICommand LoginCommand => new Command(async () => await Login());
-
-
         public async Task<bool> Login()
         {
-            Debug.WriteLine("TESTING");
             if (_email == null) { }
             if (_password == null) { }
             // Update to add some email validation

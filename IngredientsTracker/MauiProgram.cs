@@ -26,6 +26,7 @@ namespace IngredientsTracker
             builder.Services.AddSingleton<MainPage>();
 
             builder.Services.AddTransient<CreateAccount>();
+            builder.Services.AddTransient<CreateAccountVM>();
 
 
             builder.Services.AddTransient<Login>();
@@ -34,9 +35,9 @@ namespace IngredientsTracker
             builder.Services.AddSingleton<HomePage>();
 
             // Remove after testing
-            TokenHandler th = new TokenHandler();
-            th.DeleteRefreshToken();
-            th.DeleteAccessToken();
+            //TokenHandler th = new TokenHandler();
+            //th.DeleteRefreshToken();
+            //th.DeleteAccessToken();
 
             //builder.Services.AddTransient<DishList>();
             var app = builder.Build();

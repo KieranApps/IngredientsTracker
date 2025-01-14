@@ -2,12 +2,66 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="IngredientsTracker.CreateAccount"
+             xmlns:viewmodel="clr-namespace:IngredientsTracker.ViewModels"
              Title="CreateAccount">
+    <!-- Bind the page to the ViewModel -->
+    <ContentPage.BindingContext>
+        <viewmodel:CreateAccountVM />
+    </ContentPage.BindingContext>
     <VerticalStackLayout>
-        <Label 
-            Text="Create your account!"
-            FontSize="30"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            <Label 
+                Text="Login!"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center" />
+            <Entry
+                Grid.Row="0"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="{Binding Name}"
+                Placeholder="Name"
+                Keyboard="Plain"
+                PlaceholderColor="DarkGray"
+            />
+
+            <Entry
+                Grid.Row="0"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="{Binding Email}"
+                Placeholder="Email"
+                Keyboard="Plain"
+                PlaceholderColor="DarkGray"
+                TextChanged="CheckEmailIsValid"
+            />
+            <Label
+                x:Name="errorEmail"
+                Text="Please enter a valid email."
+                TextColor="Red"
+                IsVisible="False"
+            />
+            <Entry
+                Grid.Row="1"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="{Binding Password}"
+                Placeholder="Password"
+                IsPassword="True"
+                PlaceholderColor="DarkGray"
+                TextChanged="CheckPasswordIsValid"
+            />  
+            <Label
+                x:Name="errorPassword"
+                Text="A password must contain at least one of: Lower case letter, Upper case letter and a number"
+                TextColor="Red"
+                IsVisible="False"
+            />
+
+            <Button
+                x:Name="CreateAccountButton"
+                Text="Create Account" 
+                SemanticProperties.Hint="Create Account"
+                Clicked="SubmitDetails"
+                HorizontalOptions="Fill"
+            />
+        </VerticalStackLayout>
 </ContentPage>

@@ -33,6 +33,13 @@
             PlaceholderColor="DarkGray"
         />
 
+        <Label
+            x:Name="errorMessage"
+            Text="Email or password is incorrect. Please check and try again."
+            TextColor="Red"
+            IsVisible="False"
+        />
+
         <Button
             x:Name="LoginButton"
             Text="Login" 
