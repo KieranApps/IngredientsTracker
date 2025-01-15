@@ -48,7 +48,32 @@ namespace IngredientsTracker.Helpers
             host = configData["ApiHost"];
         }
 
-                // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
+        // Will only be called within this class
+        private async Task<bool> AttemptTokenRefresh()
+        {
+            Uri uri = new Uri(host + "/auth/refresh");
+            var request = new HttpRequestMessage(HttpMethod.Get, uri);
+            string token = await _tokenHandler.GetRefreshToken();
+            request.Headers.Add("token", token);
+            var response = await _httpClient.SendAsync(request);
+            // Refresh not successful so all tokens expired/invalid
+            if (!response.IsSuccessStatusCode)
+            {
+                // Delete tokens and navigate to MainPage. (Even if awkward to do here, has to be done)
+                return false;
+            }
+
+            string responseString = await response.Content.ReadAsStringAsync();
+            JObject responseData = JObject.Parse(responseString);
+
+            string refreshToken = (string)responseData["tokens"]["refreshToken"];
+            string accessToken = (string)responseData["tokens"]["accessToken"];
+            await _tokenHandler.SaveRefreshToken(refreshToken);
+            await _tokenHandler.SaveAccessToken(accessToken);
+            return true;
+        }
+        
+        // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
         public async Task<bool> CheckTokensAreValidOnBoot(string refreshToken)
         {
             Uri uri = new Uri(host + "/auth/refresh");

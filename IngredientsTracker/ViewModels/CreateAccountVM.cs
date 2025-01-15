@@ -105,7 +105,18 @@ namespace IngredientsTracker.ViewModels
             }
             string refreshToken = (string)loginResponseData["tokens"]["refreshToken"];
             string accessToken = (string)loginResponseData["tokens"]["accessToken"];
+            string id = (string)loginResponseData["userInfo"]["id"];
+            string email = (string)loginResponseData["userInfo"]["email"];
+            string name = (string)loginResponseData["userInfo"]["name"];
+
             TokenHandler tokenHandler = new TokenHandler();
+            UserService userService = new UserService();
+
+            // Save User Info
+            await userService.SaveUserId(id);
+            await userService.SaveUserEmail(email);
+            await userService.SaveUserName(name);
+
             await tokenHandler.SaveRefreshToken(refreshToken);
             await tokenHandler.SaveAccessToken(accessToken);
             return true;

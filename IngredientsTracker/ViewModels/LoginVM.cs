@@ -55,7 +55,17 @@ namespace IngredientsTracker.ViewModels
             }
             string refreshToken = (string)responseData["tokens"]["refreshToken"];
             string accessToken = (string)responseData["tokens"]["accessToken"];
+            string id = (string)responseData["userInfo"]["id"];
+            string email = (string)responseData["userInfo"]["email"];
+            string name = (string)responseData["userInfo"]["name"];
             TokenHandler tokenHandler = new TokenHandler();
+            UserService userService = new UserService();
+
+            // Save User Info
+            await userService.SaveUserId(id);
+            await userService.SaveUserEmail(email);
+            await userService.SaveUserName(name);
+
             // Usually token handler is not created in VMs, it is already in ApiService which is where 99% of its use will be
             // i.e., reading token from memory for API calls and occasional updated token saves.
             // But with login as its a slightly Unique case where things may not be able to be saved, we shall check and save here
