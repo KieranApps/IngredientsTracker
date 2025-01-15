@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Net.Http.Headers;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace IngredientsTracker.Helpers
 {
@@ -51,19 +48,26 @@ namespace IngredientsTracker.Helpers
             host = configData["ApiHost"];
         }
 
-        // TODO: Finish off this function and add API to server
-        // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
-        public async Task<bool> CheckTokensAreValidOnBoot(string refreshToken) // Purely valid on the server/in date. Already been read in the app storage
+                // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
+        public async Task<bool> CheckTokensAreValidOnBoot(string refreshToken)
         {
-            // Just check refresh throught the refresh endpoint
-            // If refresh valid, just renew access regardless. If not, return false and stay in log in screen
             Uri uri = new Uri(host + "/auth/refresh");
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", refreshToken);
+            request.Headers.Add("token", refreshToken);
             var response = await _httpClient.SendAsync(request);
-            Debug.WriteLine(response);
-            // Check status code and response. Will depend if we need to log out to force new session or update saved etc...
+            if (!response.IsSuccessStatusCode)
+            {
+                return false;
+            }
+            
+            // If success, i.e., still authorised, save tokens to be updated
+            string responseString = await response.Content.ReadAsStringAsync();
+            JObject responseData = JObject.Parse(responseString);
 
+            string newRefreshToken = (string)responseData["tokens"]["refreshToken"];
+            string accessToken = (string)responseData["tokens"]["accessToken"];
+            await _tokenHandler.SaveRefreshToken(newRefreshToken);
+            await _tokenHandler.SaveAccessToken(accessToken);
             return true;
         }
 
@@ -97,7 +101,7 @@ namespace IngredientsTracker.Helpers
 
         public async Task<string> CreateAccount(string name, string email, string password)
         {
-            Uri uri = new Uri(host + "/user/create-account");
+            Uri uri = new Uri(host + "/user/create-user");
             var request = new HttpRequestMessage(HttpMethod.Post, uri);
             var body = new
             {

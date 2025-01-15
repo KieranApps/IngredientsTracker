@@ -1,6 +1,5 @@
-﻿using IngredientsTracker.Database;
-using IngredientsTracker.Helpers;
-using Microsoft.Extensions.Logging;
+﻿using IngredientsTracker.Helpers;
+using System.Diagnostics;
 
 namespace IngredientsTracker
 {
@@ -30,14 +29,12 @@ namespace IngredientsTracker
             }
             // Check refresh token is valid
             bool isValid = await _api.CheckTokensAreValidOnBoot(refreshToken);
-
             if (isValid)
             {
                 // Skip the login screen
                 // Remove history so you cant go back to log in screen
                 var homePage = App.ServiceProvider.GetService<HomePage>();
-                await Navigation.PushAsync(homePage);
-                Navigation.RemovePage(this);
+                App.Current.MainPage = new NavigationPage(homePage);
             }
         }
 

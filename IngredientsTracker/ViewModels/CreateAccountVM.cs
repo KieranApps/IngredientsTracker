@@ -96,19 +96,18 @@ namespace IngredientsTracker.ViewModels
             }
 
             string logInResponse = await _api.Login(_email, _password);
-            JObject loginResponseData = JObject.Parse(response);
+            JObject loginResponseData = JObject.Parse(logInResponse);
             bool loginSuccess = (bool)loginResponseData["success"];
             if (!loginSuccess)
             {
                 Debug.WriteLine("Error Logging in");
                 return false;
             }
-            string refreshToken = (string)responseData["tokens"]["refreshToken"];
-            string accessToken = (string)responseData["tokens"]["accessToken"];
+            string refreshToken = (string)loginResponseData["tokens"]["refreshToken"];
+            string accessToken = (string)loginResponseData["tokens"]["accessToken"];
             TokenHandler tokenHandler = new TokenHandler();
             await tokenHandler.SaveRefreshToken(refreshToken);
             await tokenHandler.SaveAccessToken(accessToken);
-            var homePage = App.ServiceProvider.GetService<HomePage>();
             return true;
         }
     }
