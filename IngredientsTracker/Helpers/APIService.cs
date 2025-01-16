@@ -1,9 +1,8 @@
 ﻿using System.Text;
-using System.Net.Http.Headers;
-using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace IngredientsTracker.Helpers
 {
@@ -11,28 +10,8 @@ namespace IngredientsTracker.Helpers
     {
         private readonly HttpClient _httpClient;
         private readonly TokenHandler _tokenHandler;
+
         string host;
-
-
-        /**
-         * function foo(...params)
-         * call api
-         * if 401
-         *     Do token auth checks, log out if needed (i.e., the refresh is bad too)
-         *     if tokenCheck == 401: log out (delete tokens and navigate to main page via function in code-behind and remove all history
-         *     // Nav to main page and delete all history like this:
-         *         var mainPage = App.ServiceProvider.GetService<MainPage>();
-         *         App.Current.MainPage = new NavigationPage(mainPage); // i.e., we create a NEW navigation page and stack/history
-         *         // ^^ This is the SAME as is in Login.xaml.cs
-         *     else continue below...
-         *     Save tokens
-         *     // Will only retry if tokens HAVE been refreshed and saved. So there should be NO auth issue and 401
-         *     // if refersh is also un auth, we check that in here, and if IS, then log out
-         *     // So both tokens are checked. First access then refresh. If both un auth, log out.
-         *     // i.e., if access un auth, try refresh, if refresh un auth, log out
-         *     call same api and re assign the response (since not a const
-         * The recursive bit will be in the VMs
-         */
 
         public ApiService(HttpClient httpClient)
         {
@@ -59,7 +38,6 @@ namespace IngredientsTracker.Helpers
             // Refresh not successful so all tokens expired/invalid
             if (!response.IsSuccessStatusCode)
             {
-                // Delete tokens and navigate to MainPage. (Even if awkward to do here, has to be done)
                 return false;
             }
 
@@ -72,78 +50,158 @@ namespace IngredientsTracker.Helpers
             await _tokenHandler.SaveAccessToken(accessToken);
             return true;
         }
+
+        private async Task<HttpResponseMessage> RetryRequest(HttpRequestMessage request)
+        {
+            // Try and refresh, then retry the original request
+            bool successfulRefresh = await AttemptTokenRefresh();
+            if (!successfulRefresh)
+            {
+                // Log out
+                _tokenHandler.DeleteRefreshToken();
+                _tokenHandler.DeleteAccessToken();
+                // Go to main page
+                var homePage = App.ServiceProvider.GetService<MainPage>();
+                App.Current.MainPage = new NavigationPage(homePage);
+
+                return new HttpResponseMessage(); // return blank, so content is just null and will finish off whatever was running without action
+            }
+
+            request.Headers.Remove("token");
+            string token = await _tokenHandler.GetAccessToken();
+            request.Headers.Add("token", token);
+            return await _httpClient.SendAsync(request);
+        }
         
         // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
         public async Task<bool> CheckTokensAreValidOnBoot(string refreshToken)
         {
-            Uri uri = new Uri(host + "/auth/refresh");
-            var request = new HttpRequestMessage(HttpMethod.Get, uri);
-            request.Headers.Add("token", refreshToken);
-            var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
+            try
             {
+                Uri uri = new Uri(host + "/auth/refresh");
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                request.Headers.Add("token", refreshToken);
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return false;
+                }
+
+                // If success, i.e., still authorised, save tokens to be updated
+                string responseString = await response.Content.ReadAsStringAsync();
+                JObject responseData = JObject.Parse(responseString);
+
+                string newRefreshToken = (string)responseData["tokens"]["refreshToken"];
+                string accessToken = (string)responseData["tokens"]["accessToken"];
+                await _tokenHandler.SaveRefreshToken(newRefreshToken);
+                await _tokenHandler.SaveAccessToken(accessToken);
+                return true;
+
+            }
+            catch (Exception ex) {
                 return false;
             }
-            
-            // If success, i.e., still authorised, save tokens to be updated
-            string responseString = await response.Content.ReadAsStringAsync();
-            JObject responseData = JObject.Parse(responseString);
-
-            string newRefreshToken = (string)responseData["tokens"]["refreshToken"];
-            string accessToken = (string)responseData["tokens"]["accessToken"];
-            await _tokenHandler.SaveRefreshToken(newRefreshToken);
-            await _tokenHandler.SaveAccessToken(accessToken);
-            return true;
         }
+        
 
-        public async Task<bool> RefreshTokens()
-        {
-            string refreshToken = await _tokenHandler.GetRefreshToken();
-
-            return true;
-        }
-
+        /**
+         * --------------------------------
+         * Main APIs below this point
+         * --------------------------------
+         */
         public async Task<string> Login(string email, string password)
         {
-            Uri uri = new Uri(host + "/user/login");
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            //request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", refreshToken); // Headers + tokens not needed for login
-            var body = new
+            try
             {
-                email = email,
-                password = password
-            };
-            string payload = JsonSerializer.Serialize(body);
-            request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode) 
-            {
+                Uri uri = new Uri(host + "/user/login");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+                var body = new
+                {
+                    email = email,
+                    password = password
+                };
+                string payload = JsonSerializer.Serialize(body);
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return "{success: false}";
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex) {
                 return "{success: false}";
             }
-            string responseData = await response.Content.ReadAsStringAsync();
-            return responseData;
         }
 
         public async Task<string> CreateAccount(string name, string email, string password)
         {
-            Uri uri = new Uri(host + "/user/create-user");
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
-            var body = new
+            try
             {
-                name = name,
-                email = email,
-                password = password
-            };
-            string payload = JsonSerializer.Serialize(body);
-            request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
-            var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
+                Uri uri = new Uri(host + "/user/create-user");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+                var body = new
+                {
+                    name = name,
+                    email = email,
+                    password = password
+                };
+                string payload = JsonSerializer.Serialize(body);
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return "{success: false}";
+                }
+
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+
+            }
+            catch (Exception ex) {
                 return "{success: false}";
             }
+        }
 
-            string responseData = await response.Content.ReadAsStringAsync();
-            return responseData;
+        public async Task<string> AddNewDish(string dishName)
+        {
+            try
+            {
+                Uri uri = new Uri(host + "/dish/add");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+                var body = new
+                {
+                    name = dishName
+                };
+                string payload = JsonSerializer.Serialize(body);
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        response = await RetryRequest(request); 
+                        // Response is blank if un auth and force log out, which is 200 code. Content is null
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            // Something else went wrong with the server that is not Auth related.
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex) {
+                return "{success: false}";
+            }
         }
     }
 }

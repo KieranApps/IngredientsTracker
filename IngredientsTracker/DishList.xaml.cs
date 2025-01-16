@@ -1,15 +1,19 @@
-using IngredientsTracker.Database;
 using IngredientsTracker.ViewModels;
-using System.Collections.ObjectModel;
-
 namespace IngredientsTracker;
 
 public partial class DishList : ContentPage
 {
-    
-    public DishList(Database.Database db)
+    DishListVM vm;
+    public DishList()
 	{
         InitializeComponent();
-        BindingContext = new DishListVM(db);
+        vm = App.ServiceProvider.GetService<DishListVM>();
+        BindingContext = vm;
     }
+
+    public async void SubmitNewDishClick(object sender, EventArgs e)
+    {
+       await vm.AddDish();
+    }
+    
 }

@@ -1,5 +1,4 @@
-﻿using SQLite;
-
+﻿
 namespace IngredientsTracker
 {
     public partial class App : Application

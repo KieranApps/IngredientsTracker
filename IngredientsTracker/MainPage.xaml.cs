@@ -20,7 +20,7 @@ namespace IngredientsTracker
         {
             TokenHandler tokenHandler = new TokenHandler();
             string refreshToken = await tokenHandler.GetRefreshToken();
-            if (refreshToken == null) // We dont have refresh token so login
+            if (refreshToken == null) // We dont have refresh token so got to login page
             {
                 // Delete all tokens to ensure all is empty
                 tokenHandler.DeleteRefreshToken();
@@ -35,7 +35,12 @@ namespace IngredientsTracker
                 // Remove history so you cant go back to log in screen
                 var homePage = App.ServiceProvider.GetService<HomePage>();
                 App.Current.MainPage = new NavigationPage(homePage);
+
+                return; // return so we do not accidentally delete tokens
             }
+            // If not valid, delete saved tokens
+            tokenHandler.DeleteRefreshToken();
+            tokenHandler.DeleteAccessToken();
         }
 
         private void ViewCreateAccount(object sender, EventArgs e)

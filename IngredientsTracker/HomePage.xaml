@@ -4,11 +4,13 @@
              x:Class="IngredientsTracker.HomePage"
              Title="HomePage">
     <VerticalStackLayout>
-        <Label 
-            Text="MainPage"
+        <Label
+            x:Name="WelcomeLabel"
+            Text="Welcome {username}"
+            Loaded="LoadUserInfo"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-<!--
+        
             <Button
                 x:Name="ViewDishesListButton"
                 Text="View Dishes" 
@@ -16,12 +18,13 @@
                 Clicked="ViewDishesList"
                 HorizontalOptions="Fill"
             />
+<!--
 
             <Button 
                 x:Name="ViewAllIngredientsButton"
                 Text="View Ingredients"
                 SemanticProperties.Hint="View All Ingredients"
-                Clicked="ViewAllIngredients"
+                Clicked=""
                 HorizontalOptions="Fill"
             />
 
@@ -29,7 +32,7 @@
                 x:Name="ViewScheduleButton"
                 Text="View Schedule"
                 SemanticProperties.Hint="View Schedule"
-                Clicked="ViewSchedule"
+                Clicked=""
                 HorizontalOptions="Fill"
             />
 
@@ -37,7 +40,7 @@
                 x:Name="ViewShoppingListButton"
                 Text="View Shopping List"
                 SemanticProperties.Hint="View Shopping List"
-                Clicked="ViewShoppingList"
+                Clicked=""
                 HorizontalOptions="Fill"
             />  
 -->

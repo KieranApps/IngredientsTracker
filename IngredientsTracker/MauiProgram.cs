@@ -34,12 +34,14 @@ namespace IngredientsTracker
             
             builder.Services.AddSingleton<HomePage>();
 
-            //builder.Services.AddTransient<DishList>();
+            builder.Services.AddTransient<DishList>();
+            builder.Services.AddTransient<DishListVM>();
 
             // Remove after testing
             //TokenHandler th = new TokenHandler();
             //th.DeleteRefreshToken();
             //th.DeleteAccessToken();
+
             var app = builder.Build();
 
             App.ServiceProvider = app.Services;
