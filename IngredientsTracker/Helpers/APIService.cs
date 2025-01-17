@@ -10,6 +10,7 @@ namespace IngredientsTracker.Helpers
     {
         private readonly HttpClient _httpClient;
         private readonly TokenHandler _tokenHandler;
+        private readonly UserService _userService;
 
         string host;
 
@@ -17,6 +18,7 @@ namespace IngredientsTracker.Helpers
         {
             _httpClient = httpClient;
             _tokenHandler = new TokenHandler();
+            _userService = new UserService();
 
             var assembly = Assembly.GetExecutingAssembly();
             using Stream stream = assembly.GetManifestResourceStream("IngredientsTracker.Resources.config.json");
@@ -51,6 +53,10 @@ namespace IngredientsTracker.Helpers
             return true;
         }
 
+        /**
+         *  This request param must be a FRESH request, or it wont be send a second time.
+         *  It must be built before being passed as a param, so this fuction is universal for ALL request types with/without body content etc...
+         */
         private async Task<HttpResponseMessage> RetryRequest(HttpRequestMessage request)
         {
             // Try and refresh, then retry the original request
@@ -67,10 +73,12 @@ namespace IngredientsTracker.Helpers
                 return new HttpResponseMessage(); // return blank, so content is just null and will finish off whatever was running without action
             }
 
-            request.Headers.Remove("token");
             string token = await _tokenHandler.GetAccessToken();
             request.Headers.Add("token", token);
-            return await _httpClient.SendAsync(request);
+
+            var response = await _httpClient.SendAsync(request);
+
+            return response;
         }
         
         // This function will only be used on start up, even if very similar to normal RefershTokens function. Just for ease of reading
@@ -170,20 +178,28 @@ namespace IngredientsTracker.Helpers
             {
                 Uri uri = new Uri(host + "/dish/add");
                 var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
                 string token = await _tokenHandler.GetAccessToken();
                 request.Headers.Add("token", token);
+
+                string id = await _userService.getUserId();
                 var body = new
                 {
+                    id = id,
                     name = dishName
                 };
                 string payload = JsonSerializer.Serialize(body);
+
                 request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
                 var response = await _httpClient.SendAsync(request);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode.ToString() == "Unauthorized")
                     {
-                        response = await RetryRequest(request); 
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        // No need to add token, as it should get a new one
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest); 
                         // Response is blank if un auth and force log out, which is 200 code. Content is null
                         if (!response.IsSuccessStatusCode)
                         {
