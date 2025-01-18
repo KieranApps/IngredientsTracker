@@ -185,7 +185,7 @@ namespace IngredientsTracker.Helpers
                 string id = await _userService.getUserId();
                 var body = new
                 {
-                    id = id,
+                    user_id = id,
                     name = dishName
                 };
                 string payload = JsonSerializer.Serialize(body);
