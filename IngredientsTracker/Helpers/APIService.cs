@@ -219,5 +219,49 @@ namespace IngredientsTracker.Helpers
                 return "{success: false}";
             }
         }
+
+        public async Task<string> GetAllDishes()
+        {
+            try
+            {
+                string userId = await _userService.getUserId();
+            
+                Uri uri = new Uri(host + "/dish/all/" + userId);
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        // No need to add token, as it should get a new one
+                        response = await RetryRequest(freshRequest);
+                        // Response is blank if un auth and force log out, which is 200 code. Content is null
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            // Something else went wrong with the server that is not Auth related.
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex) {
+                return "{success: false}";
+            }
+
+
+        }
+
+
     }
 }

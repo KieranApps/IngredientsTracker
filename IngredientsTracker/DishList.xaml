@@ -52,5 +52,28 @@
         </Grid>
         <!-- Tile layout of dishes, can show pictuer of it in background too which could be nice-->
 
+        <CollectionView ItemsSource="{Binding DishTiles}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                    Span="2"
+                    VerticalItemSpacing="10"
+                    HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate >
+                    <Frame BackgroundColor="{Binding TileColor}"
+                       Margin="5"
+                       HeightRequest="100"
+                    >
+                        <Label Text="{Binding Dish.Name}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                        />
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

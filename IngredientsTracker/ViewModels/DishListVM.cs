@@ -1,6 +1,7 @@
 ﻿using IngredientsTracker.Database;
 using IngredientsTracker.Helpers;
 using Microsoft.Maui.Controls;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -10,7 +11,24 @@ namespace IngredientsTracker.ViewModels
     public partial class DishListVM : BindableObject
     {
         private readonly ApiService _api;
-        public ObservableCollection<DishModel> Dishes { get; set; } // Change what is in DishModel when API response data is sorted
+        private readonly Random _rand = new Random();
+
+
+        private static readonly Color[] _tileColors = new[]
+        {
+            Color.FromArgb("#6FFF5733"), // Salmon
+            Color.FromArgb("#6FC70039"), // Baby Pink
+            Color.FromArgb("#6F2548C2"), // Baby Blue
+            Color.FromArgb("#AFDE1D1D"), // Pale Red
+            Color.FromArgb("#6F23D40A"), // Pale Green
+            Color.FromArgb("#6F2AEAEB"), // Sky Blue
+        };
+        public class DishTileModel
+        {
+            public DishModel Dish { get; set; }
+            public Color TileColor { get; set; }
+        }
+        public ObservableCollection<DishTileModel> DishTiles { get; set; } // Change what is in DishModel when API response data is sorted
 
         // Property for the new dish name input
         private string _newDishName;
@@ -29,20 +47,30 @@ namespace IngredientsTracker.ViewModels
         public DishListVM(ApiService api)
         {
             _api = api;
-            Dishes = new ObservableCollection<DishModel>();
+            DishTiles = new ObservableCollection<DishTileModel>();
             LoadDishes();
         }
 
         private async Task LoadDishes()
         {
-            
-            //Dishes.Clear(); // Make sure main object to display is empty (no weird duplicates)
+            DishTiles.Clear(); // Make sure main object to display is empty (no weird duplicates)
 
-            //// Populate the ObservableCollection
-            //foreach (var dish in dishes)
-            //{
-            //    Dishes.Add(dish);
-            //}
+            string response = await _api.GetAllDishes();
+            JObject responseData = JObject.Parse(response);
+            foreach (JObject dish in responseData["dishes"]) {
+                DishModel dishInfo = new DishModel
+                {
+                    Id = (int)dish["id"],
+                    Name = (string)dish["name"],
+                    User_Id = (int)dish["user_id"]
+                };
+                var randColour = _rand.Next(_tileColors.Length);
+                DishTiles.Add(new DishTileModel
+                {
+                    Dish = dishInfo,
+                    TileColor = _tileColors[randColour]
+                });
+            }
         }
 
         public async Task AddDish()
@@ -57,10 +85,26 @@ namespace IngredientsTracker.ViewModels
                 {
                     return;
                 }
-
-
+                JObject responseData = JObject.Parse(response);
+                bool success = (bool)responseData["success"];
                 // If success = false, something went wrong that is not auth, so just display message
+                if (!success)
+                {
+                    // error message
+                    return;
+                }
 
+                var randColour = _rand.Next(_tileColors.Length);
+                DishTiles.Add(new DishTileModel
+                {
+                    Dish = new DishModel
+                    {
+                        Id = (int)responseData["info"]["id"],
+                        Name = (string)responseData["info"]["name"],
+                        User_Id = (int)responseData["info"]["user_id"]
+                    },
+                    TileColor = _tileColors[randColour]
+                });
                 // Add the new dish to the ObservableCollection to update the UI
                 //Dishes.Add(newDish);
 

@@ -1,9 +1,11 @@
+using IngredientsTracker.Database;
 using IngredientsTracker.ViewModels;
 namespace IngredientsTracker;
 
 public partial class DishList : ContentPage
 {
     DishListVM vm;
+
     public DishList()
 	{
         InitializeComponent();
@@ -14,6 +16,11 @@ public partial class DishList : ContentPage
     public async void SubmitNewDishClick(object sender, EventArgs e)
     {
        await vm.AddDish();
+    }
+
+    public async void GoToDish(object sender, EventArgs e)
+    {
+
     }
     
 }
