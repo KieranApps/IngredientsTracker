@@ -65,11 +65,17 @@
                     <Frame BackgroundColor="{Binding TileColor}"
                        Margin="5"
                        HeightRequest="100"
+                       
                     >
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="GoToDish"
+                                                  CommandParameter="{Binding Dish}"/>
+                        </Frame.GestureRecognizers>
                         <Label Text="{Binding Dish.Name}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                        />
+                        >
+                        </Label>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

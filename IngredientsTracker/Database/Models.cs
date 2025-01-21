@@ -25,6 +25,15 @@ namespace IngredientsTracker.Database
         public float TotalAmount {  get; set; } // For the amount bought/have at the start of the week (i.e., 5 onions)
     }
 
+    public class DishIngredientsList
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public float Amount { get; set; }
+        public int DishId { get; set; }
+        public int IngredientId { get; set; }
+    }
+
     // Table to track ingredients and amounts to each dish
     public class IngredientDishModel
     {

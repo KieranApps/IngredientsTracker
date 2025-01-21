@@ -74,6 +74,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="DishInformation.xaml.cs">
+	    <DependentUpon>DishInformation.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="DishList.xaml.cs">
 	    <DependentUpon>DishList.xaml</DependentUpon>
 	  </Compile>
@@ -83,7 +86,7 @@
 	  <MauiXaml Update="CreateAccount.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="DishIngredients.xaml">
+	  <MauiXaml Update="DishInformation.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="DishList.xaml">

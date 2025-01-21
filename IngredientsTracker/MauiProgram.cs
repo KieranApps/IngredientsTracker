@@ -37,6 +37,9 @@ namespace IngredientsTracker
             builder.Services.AddTransient<DishList>();
             builder.Services.AddTransient<DishListVM>();
 
+            builder.Services.AddTransient<DishInformation>();
+            builder.Services.AddTransient<DishInformationVM>();
+
             // Remove after testing
             //TokenHandler th = new TokenHandler();
             //th.DeleteRefreshToken();

@@ -1,6 +1,4 @@
-﻿using IngredientsTracker.QueryClassDefs;
-using SQLite;
-using System.Xml.Linq;
+﻿using SQLite;
 
 namespace IngredientsTracker.Database
 {

@@ -105,8 +105,6 @@ namespace IngredientsTracker.ViewModels
                     },
                     TileColor = _tileColors[randColour]
                 });
-                // Add the new dish to the ObservableCollection to update the UI
-                //Dishes.Add(newDish);
 
                 // Clear the input field
                 NewDishName = string.Empty;
