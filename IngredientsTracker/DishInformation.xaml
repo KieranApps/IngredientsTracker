@@ -19,12 +19,13 @@
             Padding="15,0,15,20"
         >
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.5*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="0.4*" />
+                <ColumnDefinition Width="0.4*" />
+                <ColumnDefinition Width="0.2*" />
             </Grid.ColumnDefinitions>
             <Entry
                 Grid.Row="0"
@@ -35,16 +36,26 @@
                 PlaceholderColor="DarkGray"
             />
             <Entry
-                Grid.Row="1"
-                Grid.Column="0"
+                Grid.Row="0"
+                Grid.Column="1"
                 TextColor="Black"
                 Text="{Binding NewIngredientAmount}"
-                Placeholder="Enter Ingredient Amount (i.e., 100 ml, 1 piece etc...)"
+                Placeholder="Enter Ingredient"
                 PlaceholderColor="DarkGray"
-            />
+            />  
+            <Picker
+                x:Name="UnitPicker"
+                BackgroundColor="Gray"
+                Grid.Row="0"
+                Grid.Column="2"
+                ItemsSource="{Binding Units}"
+                ItemDisplayBinding="{Binding .}"
+                SelectedItem="{Binding ChosenUnit, Mode=TwoWay}">
+            </Picker>
+
             <Button
                 Grid.Row="1"
-                Grid.Column="1"
+                Grid.Column="2"
                 TextColor="White"
                 BackgroundColor="LightBlue"
                 FontAttributes="Bold"

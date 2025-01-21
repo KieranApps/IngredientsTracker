@@ -1,6 +1,8 @@
 ﻿using IngredientsTracker.Database;
 using IngredientsTracker.Helpers;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 
 namespace IngredientsTracker.ViewModels
@@ -10,6 +12,8 @@ namespace IngredientsTracker.ViewModels
         private readonly ApiService _api;
         public ObservableCollection<DishIngredientsList> Ingredients { get; set; }
         public DishModel CurrentDish;
+
+        
 
         // Property for the new dish name input
         private string _newIngredient;
@@ -34,45 +38,65 @@ namespace IngredientsTracker.ViewModels
             }
         }
 
+        private ObservableCollection<string> _units;
+        public ObservableCollection<string> Units
+        {
+            get => _units;
+            set
+            {
+                _units = value;
+                OnPropertyChanged(nameof(Units));
+            }
+        }
+
+        private string _chosenUnit;
+        public string ChosenUnit
+        {
+            get => _chosenUnit;
+            set
+            {
+                _chosenUnit = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DishInformationVM() { }
         public DishInformationVM(ApiService api)
         {
             _api = api;
             Ingredients = new ObservableCollection<DishIngredientsList>();
             LoadIngredients();
+            LoadUnits();
         }
 
         public void SetDish(DishModel dish)
         {
             CurrentDish = dish;
         }
+
         public async Task LoadIngredients()
         {
 
             
         }
 
-        public async Task SubmitIngredientForDish()
+        private async Task LoadUnits()
         {
-            
-            
-        }
+            string response = await _api.GetAllUnits();
 
-        public async Task RemoveIngredientFromDish(DishIngredientsList ingredientDishLink)
-        {
-            
-        }
-
-
-        public async Task EditIngredientEntry(DishIngredientsList editedIng)
-        {
-            
-
-        }
-        
-        private async void UpdateIngredientTotal()
-        {
-
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
+            Units = new ObservableCollection<string>();
+            // Assign units to variable for Binding
+            foreach (JObject entry in responseData["units"])
+            {
+                Units.Add((string)entry["unit"]);
+            }
         }
     }
 }

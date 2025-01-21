@@ -1,5 +1,6 @@
 using IngredientsTracker.Database;
 using IngredientsTracker.ViewModels;
+using System.Diagnostics;
 
 namespace IngredientsTracker;
 
@@ -20,5 +21,10 @@ public partial class DishInformation : ContentPage
         vm.SetDish(dish);
 
         DishInfoTitle.Text = dish.Name + " Information";
+    }
+
+    public void UpdateChosenUnit(object sender, EventArgs e)
+    {
+        Debug.WriteLine("Perform update");
     }
 }
