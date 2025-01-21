@@ -13,7 +13,7 @@ namespace IngredientsTracker.ViewModels
         public ObservableCollection<DishIngredientsList> Ingredients { get; set; }
         public DishModel CurrentDish;
 
-        
+        public string unitNameIdMap;
 
         // Property for the new dish name input
         private string _newIngredient;
@@ -91,6 +91,8 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
+            unitNameIdMap = responseData["units"].ToString(); // Save so we can get the ID for the unit when submitting
+
             Units = new ObservableCollection<string>();
             // Assign units to variable for Binding
             foreach (JObject entry in responseData["units"])
