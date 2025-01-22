@@ -296,6 +296,42 @@ namespace IngredientsTracker.Helpers
             }
         }
 
+        public async Task<string> SearchIngredients(string term)
+        {
+            try
+            {
+                Uri uri = new Uri(host + "/ingredients/search/" + term);
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
 
     }
 }

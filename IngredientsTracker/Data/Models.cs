@@ -34,6 +34,12 @@ namespace IngredientsTracker.Database
         public int IngredientId { get; set; }
     }
 
+    public class IngredientSearchResults
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
     // Table to track ingredients and amounts to each dish
     public class IngredientDishModel
     {

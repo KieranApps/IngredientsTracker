@@ -32,6 +32,7 @@
                 Grid.Column="0"
                 TextColor="Black"
                 Text="{Binding NewIngredient}"
+                TextChanged="OnIngredientEntryTextChanged"
                 Placeholder="Enter Ingredient"
                 PlaceholderColor="DarkGray"
             />

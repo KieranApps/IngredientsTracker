@@ -11,6 +11,8 @@ namespace IngredientsTracker.ViewModels
     {
         private readonly ApiService _api;
         public ObservableCollection<DishIngredientsList> Ingredients { get; set; }
+        public ObservableCollection<IngredientSearchResults> SearchResults { get; set; }
+
         public DishModel CurrentDish;
 
         public string unitNameIdMap;
@@ -98,6 +100,31 @@ namespace IngredientsTracker.ViewModels
             foreach (JObject entry in responseData["units"])
             {
                 Units.Add((string)entry["unit"]);
+            }
+        }
+
+        public async Task SearchIngredients()
+        {
+            if (string.IsNullOrEmpty(NewIngredient.Trim()) || NewIngredient.Length < 2) {
+                return; // If we need to return something for pop up to behave just return bool. True to show, False to hide
+            }
+
+            string response = await _api.SearchIngredients(NewIngredient);
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
+
+            foreach (var entry in responseData["results"])
+            {
+                SearchResults.Add(new IngredientSearchResults
+                {
+                    Id = (int)responseData["results"]["id"],
+                    Name = (string)responseData["results"]["name"]
+                });
             }
         }
     }
