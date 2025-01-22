@@ -59,6 +59,12 @@ public partial class DishInformation : ContentPage
         SearchOverlay.InputTransparent = true;
     }
 
+    public void IngredientEntryUnfocused(object sender, EventArgs e)
+    {
+        SearchResultsCollectionView.IsVisible = false;
+        SearchOverlay.InputTransparent = true;
+    }
+
     public void UpdateChosenUnit(object sender, EventArgs e)
     {
         Debug.WriteLine("Perform update");
