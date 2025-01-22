@@ -105,6 +105,8 @@ namespace IngredientsTracker.ViewModels
 
         public async Task SearchIngredients()
         {
+            SearchResults.Clear(); // Ensure empty
+
             if (string.IsNullOrEmpty(NewIngredient.Trim()) || NewIngredient.Length < 2) {
                 return; // If we need to return something for pop up to behave just return bool. True to show, False to hide
             }
@@ -117,7 +119,7 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
-
+            Debug.WriteLine(responseData["results"]);
             foreach (var entry in responseData["results"])
             {
                 SearchResults.Add(new IngredientSearchResults
