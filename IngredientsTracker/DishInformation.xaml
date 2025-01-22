@@ -14,7 +14,14 @@
             Text="View the Information for this Dish"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
         <Grid
+            Grid.Row="0"
             ColumnSpacing="10"
             Padding="15,0,15,20"
         >
@@ -71,6 +78,124 @@
                 </Button.Shadow>
             </Button>
         </Grid>
+        
+        <!-- Area for saved ingrediets -->
+            <Grid
+                Grid.Row="1"
+                ColumnSpacing="10"
+                Padding="15,0,15,20"
+            >   
+                <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*" />
+            </Grid.ColumnDefinitions>
+            <Entry
+                Grid.Row="0"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="0"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="1"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="2"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="3"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="4"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="5"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="6"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="7"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="8"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+                        <Entry
+                Grid.Row="9"
+                Grid.Column="0"
+                TextColor="Black"
+                Text="Test"
+            />
+            
+        </Grid>
 
+
+            <AbsoluteLayout x:Name="SearchOverlay" InputTransparent="True">
+                <CollectionView x:Name="SearchResultsCollectionView"
+                    IsVisible="False"
+
+                    BackgroundColor="LightGray"
+                    SelectionMode="Single"
+                                Grid.RowSpan="2" 
+                    Grid.ColumnSpan="3"
+                    VerticalOptions="Start"
+                    HeightRequest="300"
+                >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}" 
+                                Padding="10"
+                                TextColor="Black">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnResultTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+            </AbsoluteLayout>
+        </Grid>
+        
     </VerticalStackLayout>
 </ContentPage>

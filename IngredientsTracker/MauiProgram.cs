@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui;
-using IngredientsTracker.Helpers;
+﻿using IngredientsTracker.Helpers;
 using IngredientsTracker.ViewModels;
 
 namespace IngredientsTracker
@@ -11,7 +10,6 @@ namespace IngredientsTracker
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

@@ -11,7 +11,7 @@ public partial class DishInformation : ContentPage
 
     private Timer _timer;
     private const int pauseTime = 500; // ms
-                                       // 
+
 	public DishInformation()
     {
         InitializeComponent();
@@ -25,6 +25,8 @@ public partial class DishInformation : ContentPage
         vm.SetDish(dish);
 
         DishInfoTitle.Text = dish.Name + " Information";
+
+        vm.SearchResultsReady += OnSearchResultsReady;
     }
 
     private void OnIngredientEntryTextChanged(object sender, EventArgs e)
@@ -40,8 +42,30 @@ public partial class DishInformation : ContentPage
         }, null, pauseTime, Timeout.Infinite);
     }
 
+    private async void OnSearchResultsReady(object sender, IEnumerable<IngredientSearchResults> results)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            SearchResultsCollectionView.ItemsSource = vm.SearchResults;
+            SearchResultsCollectionView.IsVisible = vm.SearchResults.Count > 0;
+            SearchOverlay.InputTransparent = vm.SearchResults.Count <= 0;
+        });
+    }
+
+    public void OnResultTapped(object sender, EventArgs e)
+    {
+        Debug.WriteLine("Closing");
+        SearchResultsCollectionView.IsVisible = false;
+        SearchOverlay.InputTransparent = true;
+    }
+
     public void UpdateChosenUnit(object sender, EventArgs e)
     {
         Debug.WriteLine("Perform update");
+    }
+
+    private void OnResultTapped(object sender, TappedEventArgs e)
+    {
+
     }
 }

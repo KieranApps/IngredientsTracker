@@ -2,6 +2,7 @@
 using IngredientsTracker.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 
 
@@ -12,6 +13,8 @@ namespace IngredientsTracker.ViewModels
         private readonly ApiService _api;
         public ObservableCollection<DishIngredientsList> Ingredients { get; set; }
         public ObservableCollection<IngredientSearchResults> SearchResults { get; set; }
+        public event EventHandler<IEnumerable<IngredientSearchResults>> SearchResultsReady;
+
 
         public DishModel CurrentDish;
 
@@ -67,6 +70,8 @@ namespace IngredientsTracker.ViewModels
         {
             _api = api;
             Ingredients = new ObservableCollection<DishIngredientsList>();
+            SearchResults = new ObservableCollection<IngredientSearchResults>();
+
             LoadIngredients();
             LoadUnits();
         }
@@ -119,14 +124,19 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
-            Debug.WriteLine(responseData["results"]);
+
             foreach (var entry in responseData["results"])
             {
                 SearchResults.Add(new IngredientSearchResults
                 {
-                    Id = (int)responseData["results"]["id"],
-                    Name = (string)responseData["results"]["name"]
+                    Id = (string)entry["id"],
+                    Name = (string)entry["name"]
                 });
+            }
+
+            if (SearchResults.Any())
+            {
+                SearchResultsReady?.Invoke(this, SearchResults);
             }
         }
     }
