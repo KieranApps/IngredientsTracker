@@ -23,10 +23,10 @@ namespace IngredientsTracker.Data
     public class DishIngredientsList
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public float Amount { get; set; }
         public int DishId { get; set; }
-        public int IngredientId { get; set; }
+        public string IngredientId { get; set; }
+        public string Amount { get; set; }
+        public string UnitId { get; set; }
     }
 
     public class IngredientSearchResult

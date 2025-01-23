@@ -69,8 +69,16 @@ public partial class DishInformation : ContentPage
         SearchResultsCollectionView.InputTransparent = true;
     }
 
-    public void UpdateChosenUnit(object sender, EventArgs e)
+    public async void SubmitIngredient(object sender, EventArgs e)
     {
-        Debug.WriteLine("Perform update");
+        bool success = await vm.SubmitNewIngredient();
+
+        if (!success)
+        {
+            Debug.WriteLine("Error submitting");
+            // error message
+        }
+
+
     }
 }

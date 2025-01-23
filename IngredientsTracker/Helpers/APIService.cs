@@ -334,6 +334,54 @@ namespace IngredientsTracker.Helpers
             }
         }
 
+        public async Task<string> SubmitIngredient(int dish_id, string ingredient_id, string amount, string unit_id)
+        {
+            try
+            {
+                Uri uri = new Uri(host + "/dish/add/ingredient");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var body = new
+                {
+                    dish_id,
+                    ingredient_id,
+                    amount,
+                    unit_id
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
 
     }
 }

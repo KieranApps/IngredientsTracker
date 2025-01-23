@@ -59,6 +59,7 @@
                 BackgroundColor="LightBlue"
                 FontAttributes="Bold"
                 Text="Submit"
+                Clicked="SubmitIngredient"
             >
                 <Button.Shadow>
                     <Shadow Brush="LightBlue"

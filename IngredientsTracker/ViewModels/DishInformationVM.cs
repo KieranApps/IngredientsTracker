@@ -2,6 +2,7 @@
 using IngredientsTracker.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 
 namespace IngredientsTracker.ViewModels
@@ -17,7 +18,7 @@ namespace IngredientsTracker.ViewModels
 
         public DishModel CurrentDish;
 
-        public string unitNameIdMap;
+        public JArray unitNameIdMap;
 
         // Property for the new dish name input
         private string _newIngredient;
@@ -99,7 +100,8 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
-            unitNameIdMap = responseData["units"].ToString(); // Save so we can get the ID for the unit when submitting
+            string unitsAsString = responseData["units"].ToString(); // Save so we can get the ID for the unit when submitting
+            unitNameIdMap = JArray.Parse(unitsAsString);
 
             Units = new ObservableCollection<string>();
             // Assign units to variable for Binding
@@ -144,6 +146,56 @@ namespace IngredientsTracker.ViewModels
             {
                 SearchResultsReady?.Invoke(this, SearchResults);
             }
+        }
+
+        public async Task<bool> SubmitNewIngredient()
+        {
+            if (
+                NewSelectedIngredient == null ||
+                string.IsNullOrEmpty(NewIngredientAmount) ||
+                string.IsNullOrEmpty(ChosenUnit)
+                )
+            {
+                return false;
+            }
+
+            // Get ChosenUnit ID
+            string unitId = "";
+            foreach (var unit in unitNameIdMap)
+            {
+                if ((string)unit["unit"] == ChosenUnit)
+                {
+                    unitId = (string)unit["id"];
+                }
+            }
+
+            if (!float.TryParse(NewIngredientAmount, out _))
+            {
+                return false; // Amount must be number
+            }
+            var response = await _api.SubmitIngredient(CurrentDish.Id, NewSelectedIngredient.Id, NewIngredientAmount, unitId);
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                return false;
+            }
+            // Add to IngredientList and then remove form new params
+            Ingredients.Add(new DishIngredientsList
+            {
+                Id = (int)responseData["result"],
+                DishId = CurrentDish.Id,
+                IngredientId = NewSelectedIngredient.Id,
+                Amount = NewIngredientAmount,
+                UnitId = unitId,
+            });
+
+            NewIngredient = "";
+            NewIngredientAmount = "";
+            ChosenUnit = "";
+            SearchResults.Clear();
+            
+            return true;
         }
     }
 }
