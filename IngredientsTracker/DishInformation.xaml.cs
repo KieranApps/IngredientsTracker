@@ -33,10 +33,8 @@ public partial class DishInformation : ContentPage
     {
         _timer?.Dispose();
 
-        // Create a new timer that triggers after the user pauses typing for 1 second
         _timer = new Timer(async _ =>
         {
-            // The user paused typing, so do your API call
             await vm.SearchIngredients(); // No need for param, we can use NewIngredient in the VM
 
         }, null, pauseTime, Timeout.Infinite);
@@ -59,15 +57,10 @@ public partial class DishInformation : ContentPage
         var chosenIngredient = tapGesture.CommandParameter as IngredientSearchResult;
         vm.NewSelectedIngredient = chosenIngredient;
         vm.NewIngredient = chosenIngredient.Name;
-        /**
-         * 
-         * After selecting the ingredient, it performs another search, therefore the drop down shows again
-         * Need to fix this small bug
-         * Should be relatively straight forward
-         * 
-         */ 
+
         SearchResultsCollectionView.IsVisible = false;
         SearchResultsCollectionView.InputTransparent = true;
+        vm.optionSelected = true;
     }
 
     public void IngredientEntryUnfocused(object sender, EventArgs e)
@@ -79,10 +72,5 @@ public partial class DishInformation : ContentPage
     public void UpdateChosenUnit(object sender, EventArgs e)
     {
         Debug.WriteLine("Perform update");
-    }
-
-    private void OnResultTapped(object sender, TappedEventArgs e)
-    {
-
     }
 }

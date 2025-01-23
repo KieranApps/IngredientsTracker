@@ -56,6 +56,8 @@ namespace IngredientsTracker.Helpers
         /**
          *  This request param must be a FRESH request, or it wont be send a second time.
          *  It must be built before being passed as a param, so this fuction is universal for ALL request types with/without body content etc...
+         *  
+         *  Could be worth trying to create two of these (overrides) so that there is a post and get equivalent function for retry, neatens up each API call
          */
         private async Task<HttpResponseMessage> RetryRequest(HttpRequestMessage request)
         {

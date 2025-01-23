@@ -13,6 +13,7 @@ namespace IngredientsTracker.ViewModels
         public ObservableCollection<IngredientSearchResult> SearchResults { get; set; }
         public event EventHandler<IEnumerable<IngredientSearchResult>> SearchResultsReady;
 
+        public bool optionSelected = false;
 
         public DishModel CurrentDish;
 
@@ -110,6 +111,11 @@ namespace IngredientsTracker.ViewModels
 
         public async Task SearchIngredients()
         {
+            if (optionSelected)
+            {
+                optionSelected = false;
+                return;
+            }
             SearchResults.Clear(); // Ensure empty
 
             if (string.IsNullOrEmpty(NewIngredient.Trim()) || NewIngredient.Length < 2) {
