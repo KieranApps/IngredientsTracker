@@ -4,7 +4,7 @@ namespace IngredientsTracker;
 
 public partial class IngredientsList : ContentPage
 {
-	public IngredientsList(Database.Database db)
+	public IngredientsList(Data.Database db)
     {
         InitializeComponent();
         BindingContext = new IngredientsListVM(db);

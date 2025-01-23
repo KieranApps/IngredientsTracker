@@ -65,7 +65,6 @@
                     <Frame BackgroundColor="{Binding TileColor}"
                        Margin="5"
                        HeightRequest="100"
-                       
                     >
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="GoToDish"

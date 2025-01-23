@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace IngredientsTracker.Database
+namespace IngredientsTracker.Data
 {
     public class Database
     {

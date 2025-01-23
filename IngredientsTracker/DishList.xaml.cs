@@ -1,5 +1,5 @@
-using IngredientsTracker.Database;
 using IngredientsTracker.ViewModels;
+using IngredientsTracker.Data;
 
 namespace IngredientsTracker;
 

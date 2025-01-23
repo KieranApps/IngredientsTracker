@@ -1,4 +1,4 @@
-using IngredientsTracker.Database;
+using IngredientsTracker.Data;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
 
@@ -24,7 +24,7 @@ public partial class DishInformation : ContentPage
         _dish = dish;
         vm.SetDish(dish);
 
-        DishInfoTitle.Text = dish.Name + " Information";
+        DishInfoPage.Title = dish.Name + " Information";
 
         vm.SearchResultsReady += OnSearchResultsReady;
     }
@@ -42,27 +42,38 @@ public partial class DishInformation : ContentPage
         }, null, pauseTime, Timeout.Infinite);
     }
 
-    private async void OnSearchResultsReady(object sender, IEnumerable<IngredientSearchResults> results)
+    private async void OnSearchResultsReady(object sender, IEnumerable<IngredientSearchResult> results)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
             SearchResultsCollectionView.ItemsSource = vm.SearchResults;
             SearchResultsCollectionView.IsVisible = vm.SearchResults.Count > 0;
-            SearchOverlay.InputTransparent = vm.SearchResults.Count <= 0;
+            SearchResultsCollectionView.InputTransparent = vm.SearchResults.Count <= 0;
         });
     }
 
     public void OnResultTapped(object sender, EventArgs e)
     {
-        Debug.WriteLine("Closing");
+        Label label = (Label)sender;
+        var tapGesture = (TapGestureRecognizer)label.GestureRecognizers.FirstOrDefault();
+        var chosenIngredient = tapGesture.CommandParameter as IngredientSearchResult;
+        vm.NewSelectedIngredient = chosenIngredient;
+        vm.NewIngredient = chosenIngredient.Name;
+        /**
+         * 
+         * After selecting the ingredient, it performs another search, therefore the drop down shows again
+         * Need to fix this small bug
+         * Should be relatively straight forward
+         * 
+         */ 
         SearchResultsCollectionView.IsVisible = false;
-        SearchOverlay.InputTransparent = true;
+        SearchResultsCollectionView.InputTransparent = true;
     }
 
     public void IngredientEntryUnfocused(object sender, EventArgs e)
     {
         SearchResultsCollectionView.IsVisible = false;
-        SearchOverlay.InputTransparent = true;
+        SearchResultsCollectionView.InputTransparent = true;
     }
 
     public void UpdateChosenUnit(object sender, EventArgs e)

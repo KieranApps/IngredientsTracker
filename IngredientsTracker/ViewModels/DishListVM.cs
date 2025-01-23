@@ -1,10 +1,7 @@
-﻿using IngredientsTracker.Database;
+﻿using IngredientsTracker.Data;
 using IngredientsTracker.Helpers;
-using Microsoft.Maui.Controls;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows.Input;
 
 namespace IngredientsTracker.ViewModels
 {

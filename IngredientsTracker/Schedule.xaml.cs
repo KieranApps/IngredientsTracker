@@ -6,7 +6,7 @@ namespace IngredientsTracker;
 public partial class Schedule : ContentPage
 {
     private ScheduleVM ViewModel;
-    public Schedule(Database.Database _db)
+    public Schedule(Data.Database _db)
 	{
 		InitializeComponent();
         ViewModel = new ScheduleVM(_db);

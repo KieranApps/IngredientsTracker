@@ -1,9 +1,7 @@
-﻿using IngredientsTracker.Database;
+﻿using IngredientsTracker.Data;
 using IngredientsTracker.Helpers;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 
 
 namespace IngredientsTracker.ViewModels
@@ -12,8 +10,8 @@ namespace IngredientsTracker.ViewModels
     {
         private readonly ApiService _api;
         public ObservableCollection<DishIngredientsList> Ingredients { get; set; }
-        public ObservableCollection<IngredientSearchResults> SearchResults { get; set; }
-        public event EventHandler<IEnumerable<IngredientSearchResults>> SearchResultsReady;
+        public ObservableCollection<IngredientSearchResult> SearchResults { get; set; }
+        public event EventHandler<IEnumerable<IngredientSearchResult>> SearchResultsReady;
 
 
         public DishModel CurrentDish;
@@ -31,6 +29,8 @@ namespace IngredientsTracker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public IngredientSearchResult NewSelectedIngredient { get; set; }
 
         private string _newIngredientAmount; // Convert to float once focus off and check/validate
         public string NewIngredientAmount
@@ -70,7 +70,7 @@ namespace IngredientsTracker.ViewModels
         {
             _api = api;
             Ingredients = new ObservableCollection<DishIngredientsList>();
-            SearchResults = new ObservableCollection<IngredientSearchResults>();
+            SearchResults = new ObservableCollection<IngredientSearchResult>();
 
             LoadIngredients();
             LoadUnits();
@@ -127,7 +127,7 @@ namespace IngredientsTracker.ViewModels
 
             foreach (var entry in responseData["results"])
             {
-                SearchResults.Add(new IngredientSearchResults
+                SearchResults.Add(new IngredientSearchResult
                 {
                     Id = (string)entry["id"],
                     Name = (string)entry["name"]

@@ -10,9 +10,8 @@ namespace IngredientsTracker.ViewModels
 {
     partial class ScheduleVM : BindableObject
     {
-        private readonly Database.Database _db;
 
-
+        private readonly Data.Database _db;
         public ObservableCollection<CalendarDay> CalendarDays { get; set; }
 
         public ScheduleVM() { }
@@ -25,7 +24,7 @@ namespace IngredientsTracker.ViewModels
 
        
 
-        public ScheduleVM(Database.Database db)
+        public ScheduleVM(Data.Database db)
         {
             _db = db;
 

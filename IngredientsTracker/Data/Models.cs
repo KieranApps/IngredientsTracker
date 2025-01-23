@@ -1,11 +1,6 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IngredientsTracker.Database
+namespace IngredientsTracker.Data
 {
     public class DishModel
     {
@@ -34,7 +29,7 @@ namespace IngredientsTracker.Database
         public int IngredientId { get; set; }
     }
 
-    public class IngredientSearchResults
+    public class IngredientSearchResult
     {
         public string Id { get; set; }
         public string Name { get; set; }

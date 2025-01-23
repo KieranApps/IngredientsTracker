@@ -1,4 +1,4 @@
-﻿using IngredientsTracker.Database;
+﻿using IngredientsTracker.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +13,7 @@ namespace IngredientsTracker.ViewModels
     {
         public ObservableCollection<IngredientsModel> Ingredients { get; set; }
 
-        private readonly Database.Database _db;
+        private readonly Data.Database _db;
 
         private string _newIngredient;
         public string NewIngredient
@@ -38,7 +38,7 @@ namespace IngredientsTracker.ViewModels
         }
 
         public IngredientsListVM() { }
-        public IngredientsListVM(Database.Database db)
+        public IngredientsListVM(Data.Database db)
         {
             _db = db;
             Ingredients = new ObservableCollection<IngredientsModel>();
