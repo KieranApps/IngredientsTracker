@@ -27,6 +27,7 @@ namespace IngredientsTracker.Data
         public string IngredientId { get; set; }
         public string Amount { get; set; }
         public string UnitId { get; set; }
+        public string IngredientName { get; set; }
     }
 
     public class IngredientSearchResult

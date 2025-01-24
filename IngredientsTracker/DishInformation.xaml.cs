@@ -17,6 +17,7 @@ public partial class DishInformation : ContentPage
         InitializeComponent();
         vm = App.ServiceProvider.GetService<DishInformationVM>();
         BindingContext = vm;
+        vm.SearchResultsReady += OnSearchResultsReady;
     }
 
     public void SetDish(DishModel dish)
@@ -25,8 +26,6 @@ public partial class DishInformation : ContentPage
         vm.SetDish(dish);
 
         DishInfoPage.Title = dish.Name + " Information";
-
-        vm.SearchResultsReady += OnSearchResultsReady;
     }
 
     private void OnIngredientEntryTextChanged(object sender, EventArgs e)

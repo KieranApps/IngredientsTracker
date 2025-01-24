@@ -81,12 +81,13 @@
                     Grid.ColumnSpan="4"
                     BackgroundColor="#FDFDFD">
                 <CollectionView
+                    ItemsSource="{Binding Ingredients}"
                         x:Name="IngredientList"
                         BackgroundColor="Transparent">
                     <!-- For example: existing dish ingredients -->
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Label Text="{Binding Name}" Padding="10" />
+                            <Label Text="{Binding IngredientName}" Padding="10" />
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

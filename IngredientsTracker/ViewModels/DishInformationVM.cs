@@ -73,20 +73,43 @@ namespace IngredientsTracker.ViewModels
             _api = api;
             Ingredients = new ObservableCollection<DishIngredientsList>();
             SearchResults = new ObservableCollection<IngredientSearchResult>();
-
-            LoadIngredients();
             LoadUnits();
         }
 
         public void SetDish(DishModel dish)
         {
             CurrentDish = dish;
+            LoadIngredients();
         }
 
         public async Task LoadIngredients()
         {
+            string response = await _api.GetIngredientsForDish(CurrentDish.Id);
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
 
-            
+            string ingredientsAsString = responseData["ingredients"].ToString(); // Save so we can get the ID for the unit when submitting
+            JArray ingredients = JArray.Parse(ingredientsAsString);
+            Debug.WriteLine(ingredients);
+
+            // Assign units to variable for Binding
+            foreach (JObject ingredient in ingredients)
+            {
+                Ingredients.Add(new DishIngredientsList
+                {
+                    Id = (int)ingredient["id"],
+                    DishId = (int)ingredient["dish_id"],
+                    IngredientId = (string)ingredient["ingredient_id"],
+                    Amount = (string)ingredient["amount"],
+                    UnitId = (string)ingredient["unit_id"],
+                    IngredientName = (string)ingredient["ingredient_name"],
+                });
+            }
         }
 
         private async Task LoadUnits()
@@ -188,6 +211,7 @@ namespace IngredientsTracker.ViewModels
                 IngredientId = NewSelectedIngredient.Id,
                 Amount = NewIngredientAmount,
                 UnitId = unitId,
+                IngredientName = NewSelectedIngredient.Name
             });
 
             NewIngredient = "";
