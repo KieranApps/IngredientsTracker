@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
 
 namespace IngredientsTracker.Helpers
 {

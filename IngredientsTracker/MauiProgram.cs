@@ -1,5 +1,8 @@
 ﻿using IngredientsTracker.Helpers;
 using IngredientsTracker.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 
 namespace IngredientsTracker
 {
