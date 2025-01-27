@@ -66,4 +66,10 @@ namespace IngredientsTracker.Data
         public bool Complete { get; set; }
 
     }
+
+    public class CalendarDay
+    {
+        public DateTime Date { get; set; }
+        public string Dish { get; set; }
+    }
 }

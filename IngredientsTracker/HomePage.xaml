@@ -18,20 +18,19 @@
                 Clicked="ViewDishesList"
                 HorizontalOptions="Fill"
             />
-<!--
+            <Button 
+                x:Name="ViewScheduleButton"
+                Text="Check your schedule"
+                SemanticProperties.Hint="Check your schedule"
+                Clicked=""
+                HorizontalOptions="Fill"
+            />  
+        <!--
 
             <Button 
                 x:Name="ViewAllIngredientsButton"
                 Text="View Ingredients"
                 SemanticProperties.Hint="View All Ingredients"
-                Clicked=""
-                HorizontalOptions="Fill"
-            />
-
-            <Button 
-                x:Name="ViewScheduleButton"
-                Text="View Schedule"
-                SemanticProperties.Hint="View Schedule"
                 Clicked=""
                 HorizontalOptions="Fill"
             />

@@ -1,32 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IngredientsTracker.Data;
+using IngredientsTracker.Helpers;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IngredientsTracker.ViewModels
 {
     partial class ScheduleVM : BindableObject
     {
 
-        private readonly Data.Database _db;
+        private readonly ApiService _api;
         public ObservableCollection<CalendarDay> CalendarDays { get; set; }
 
         public ScheduleVM() { }
-
-        public class CalendarDay
+        public ScheduleVM(ApiService api)
         {
-            public DateTime Date { get; set; }
-            public string Dish { get; set; } // Can be expanded to a list if multiple dishes per day
-        }
-
-       
-
-        public ScheduleVM(Data.Database db)
-        {
-            _db = db;
+            _api = api;
 
             CalendarDays = new ObservableCollection<CalendarDay>();
             // Get Current month and year for params

@@ -23,16 +23,17 @@ namespace IngredientsTracker
             var dishList = App.ServiceProvider.GetService<DishList>();
             Navigation.PushAsync(dishList);
         }
+        private void ViewSchedule(object sender, EventArgs e)
+        {
+            var schedule = App.ServiceProvider.GetService<Schedule>();
+            Navigation.PushAsync(schedule);
+        }
 
         //private void ViewAllIngredients(object sender, EventArgs e)
         //{
         //    Navigation.PushAsync(new IngredientsList(_db));
         //}
 
-        //private void ViewSchedule(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new Schedule(_db));
-        //}
 
         //private void ViewShoppingList(object sender, EventArgs e)
         //{
