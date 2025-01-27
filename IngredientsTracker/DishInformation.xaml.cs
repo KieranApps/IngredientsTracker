@@ -1,6 +1,7 @@
 using IngredientsTracker.Data;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
+using Microsoft.Maui.ApplicationModel;
 
 namespace IngredientsTracker;
 

@@ -1,4 +1,5 @@
-﻿
+﻿using Microsoft.Maui.ApplicationModel;
+
 namespace IngredientsTracker
 {
     public partial class App : Application
