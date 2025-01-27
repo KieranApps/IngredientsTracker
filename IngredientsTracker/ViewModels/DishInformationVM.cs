@@ -95,11 +95,19 @@ namespace IngredientsTracker.ViewModels
 
             string ingredientsAsString = responseData["ingredients"].ToString(); // Save so we can get the ID for the unit when submitting
             JArray ingredients = JArray.Parse(ingredientsAsString);
-            Debug.WriteLine(ingredients);
 
             // Assign units to variable for Binding
             foreach (JObject ingredient in ingredients)
             {
+                string unitName = string.Empty;
+                foreach (var unit in unitNameIdMap)
+                {
+                    if ((string)unit["id"] == (string)ingredient["unit_id"])
+                    {
+                        unitName = (string)unit["unit"];
+                    }
+                }
+
                 Ingredients.Add(new DishIngredientsList
                 {
                     Id = (int)ingredient["id"],
@@ -108,6 +116,7 @@ namespace IngredientsTracker.ViewModels
                     Amount = (string)ingredient["amount"],
                     UnitId = (string)ingredient["unit_id"],
                     IngredientName = (string)ingredient["ingredient_name"],
+                    UnitName = unitName
                 });
             }
         }
@@ -184,11 +193,13 @@ namespace IngredientsTracker.ViewModels
 
             // Get ChosenUnit ID
             string unitId = "";
+            string unitName = string.Empty;
             foreach (var unit in unitNameIdMap)
             {
                 if ((string)unit["unit"] == ChosenUnit)
                 {
                     unitId = (string)unit["id"];
+                    unitName = (string)unit["unit"];
                 }
             }
 
@@ -211,7 +222,8 @@ namespace IngredientsTracker.ViewModels
                 IngredientId = NewSelectedIngredient.Id,
                 Amount = NewIngredientAmount,
                 UnitId = unitId,
-                IngredientName = NewSelectedIngredient.Name
+                IngredientName = NewSelectedIngredient.Name,
+                UnitName = unitName
             });
 
             NewIngredient = "";

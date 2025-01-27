@@ -80,14 +80,42 @@
                     Grid.Row="1"
                     Grid.ColumnSpan="4"
                     BackgroundColor="#FDFDFD">
+                
                 <CollectionView
                     ItemsSource="{Binding Ingredients}"
                         x:Name="IngredientList"
                         BackgroundColor="Transparent">
-                    <!-- For example: existing dish ingredients -->
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Label Text="{Binding IngredientName}" Padding="10" />
+                <CollectionView.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.4*" />
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="0.1*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Padding="10" Text="Name" Grid.Column="0"/>
+                        <Label Padding="10" HorizontalTextAlignment="End" Text="No." Grid.Column="1"/>
+                        <Label Padding="10" HorizontalTextAlignment="Start" Text="Unit" Grid.Column="2"/>
+                    </Grid>
+                </CollectionView.Header>
+                <!-- For example: existing dish ingredients -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.4*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.1*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding IngredientName}" Padding="10" />
+                            <Label Grid.Column="1" HorizontalTextAlignment="End" Text="{Binding Amount}" Padding="10" />
+                            <Label Grid.Column="2" HorizontalTextAlignment="Start" Text="{Binding UnitName}" Padding="10" />
+                            <Label Grid.Column="4" Text="D" Padding="10" />
+                        </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
