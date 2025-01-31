@@ -35,7 +35,11 @@
                 HorizontalTextAlignment="Center"
             />
         </Grid>
-        <!-- Layout of a week, with deishes listed below. The a button to open the input of dish drop down and date time, then button to submit -->
+        <!-- Layout of a week, with deishes listed below. The a button to open the input of dish drop down and date time, then button to submit\
+        
+            Use a custom component (create in Components to have the main date 'square (with info in)' then can use the collection to loop these custom components in
+        
+        -->
         <Grid  x:Name="CalendarGrid" RowSpacing="5" ColumnSpacing="5" Padding="10">
             <!-- Define 7 columns for days of the week -->
             <Grid.ColumnDefinitions>

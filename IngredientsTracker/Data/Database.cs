@@ -10,11 +10,11 @@ namespace IngredientsTracker.Data
         {
 
             _database = new SQLiteAsyncConnection(dbPath);
-            _database.CreateTableAsync<DishModel>().Wait(); // Copy this for any other model/table
-            _database.CreateTableAsync<IngredientsModel>().Wait();
-            _database.CreateTableAsync<IngredientDishModel>().Wait();
-            _database.CreateTableAsync<ShoppingList>().Wait();
-            _database.CreateTableAsync<Schedule>().Wait();
+            //_database.CreateTableAsync<DishModel>().Wait(); // Copy this for any other model/table
+            //_database.CreateTableAsync<IngredientsModel>().Wait();
+            //_database.CreateTableAsync<IngredientDishModel>().Wait();
+            //_database.CreateTableAsync<ShoppingList>().Wait();
+            //_database.CreateTableAsync<Schedule>().Wait();
         }
 
         // Generic Save, should work for all saves of items

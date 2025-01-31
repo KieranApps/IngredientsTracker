@@ -5,12 +5,12 @@ namespace IngredientsTracker;
 
 public partial class Schedule : ContentPage
 {
-    private ScheduleVM ViewModel;
-    public Schedule(Data.Database _db)
+    private ScheduleVM vm;
+    public Schedule()
 	{
 		InitializeComponent();
-        ViewModel = new ScheduleVM(_db);
-        BindingContext = ViewModel;
+        vm = App.ServiceProvider.GetService<ScheduleVM>();
+        BindingContext = vm; ;
         PopulateCalendar();
     }
 
@@ -23,7 +23,7 @@ public partial class Schedule : ContentPage
         int startColumn = (int)firstDay.DayOfWeek; // Sunday = 0, Monday = 1, etc.
         int currentRow = 0;
 
-        foreach (var day in ViewModel.CalendarDays)
+        foreach (var day in vm.CalendarDays)
         {
             // Create a container for each day
             var dayContainer = new StackLayout { Padding = 5, Spacing = 2 };

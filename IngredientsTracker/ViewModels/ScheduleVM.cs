@@ -27,8 +27,21 @@ namespace IngredientsTracker.ViewModels
         // So takes month/date as a param
         public async Task GetDishScheduleForMonth(DateTime date)
         {
-            // Get Current Month
+            // Get Month Length
             int monthLength = DateTime.DaysInMonth(date.Year, date.Month);
+            DateTime startDate = new DateTime(date.Year, date.Month, 1);
+            DateTime endDate = new DateTime(date.Year, date.Month, monthLength);
+
+            string response = await _api.GetSchedule(startDate, endDate);
+            Debug.WriteLine(response);
+
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
         }
     }
 }

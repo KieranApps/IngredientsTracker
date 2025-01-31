@@ -4,6 +4,7 @@ using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
+using System.Diagnostics;
 
 namespace IngredientsTracker.Helpers
 {
@@ -420,6 +421,44 @@ namespace IngredientsTracker.Helpers
             }
         }
 
+        public async Task<string> GetSchedule(DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/schedule/" + user_id + "/" + startDate.ToString("MM-dd-yyyy") + "/" + endDate.ToString("MM-dd-yyyy"));
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var response = await _httpClient.SendAsync(request);
+                Debug.WriteLine(request);
+                Debug.WriteLine(response);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
 
     }
 }
