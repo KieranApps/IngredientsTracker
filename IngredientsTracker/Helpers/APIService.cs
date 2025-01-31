@@ -433,8 +433,6 @@ namespace IngredientsTracker.Helpers
                 request.Headers.Add("token", token);
 
                 var response = await _httpClient.SendAsync(request);
-                Debug.WriteLine(request);
-                Debug.WriteLine(response);
                 if (!response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode.ToString() == "Unauthorized")

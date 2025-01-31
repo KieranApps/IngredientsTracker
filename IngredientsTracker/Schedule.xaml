@@ -19,61 +19,24 @@
             <Label
                 Grid.Column="0"
                 TextColor="Black"
-                Text="Previous Month"
-                HorizontalTextAlignment="Center"
+                Text="&#xef7d;"
+                FontSize="36"
+                HorizontalTextAlignment="End"
             />
             <Label
                 Grid.Column="1"
                 TextColor="Black"
-                Text="AAAAAA"
+                Text="{Binding monthSelected}"
+                FontSize="36"
                 HorizontalTextAlignment="Center"
             />
             <Label
                 Grid.Column="2"
                 TextColor="Black"
-                Text="Next Month"
-                HorizontalTextAlignment="Center"
+                Text="&#xe941;"
+                FontSize="36"
+                HorizontalTextAlignment="Start"
             />
         </Grid>
-        <!-- Layout of a week, with deishes listed below. The a button to open the input of dish drop down and date time, then button to submit\
-        
-            Use a custom component (create in Components to have the main date 'square (with info in)' then can use the collection to loop these custom components in
-        
-        -->
-        <Grid  x:Name="CalendarGrid" RowSpacing="5" ColumnSpacing="5" Padding="10">
-            <!-- Define 7 columns for days of the week -->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <!-- Define 6 rows for weeks -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-        </Grid>
-        <!--
-        <CollectionView ItemsSource="{Binding CalendarDays}">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="7" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="5">
-                        <Label Text="{Binding Date.Day}" HorizontalOptions="Center" FontAttributes="Bold" />
-                        <Label Text="{Binding Dish}" HorizontalOptions="Center" FontSize="10" TextColor="DarkBlue" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>-->
     </VerticalStackLayout>
 </ContentPage>

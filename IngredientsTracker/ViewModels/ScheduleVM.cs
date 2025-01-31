@@ -12,6 +12,8 @@ namespace IngredientsTracker.ViewModels
         private readonly ApiService _api;
         public ObservableCollection<CalendarDay> CalendarDays { get; set; }
 
+        public string monthSelected { get; set; }
+
         public ScheduleVM() { }
         public ScheduleVM(ApiService api)
         {
@@ -20,6 +22,8 @@ namespace IngredientsTracker.ViewModels
             CalendarDays = new ObservableCollection<CalendarDay>();
             // Get Current month and year for params
             DateTime today = DateTime.Today;
+            monthSelected = today.ToString("MMMM");
+            Debug.WriteLine(monthSelected);
             GetDishScheduleForMonth(today);
         }
 
@@ -33,7 +37,6 @@ namespace IngredientsTracker.ViewModels
             DateTime endDate = new DateTime(date.Year, date.Month, monthLength);
 
             string response = await _api.GetSchedule(startDate, endDate);
-            Debug.WriteLine(response);
 
             JObject responseData = JObject.Parse(response);
             bool success = (bool)responseData["success"];
@@ -41,6 +44,38 @@ namespace IngredientsTracker.ViewModels
             {
                 // error message
                 return;
+            }
+
+            // Loop for month length filing in schedule (leave data blank if nothign for that date in response
+            JArray results = (JArray)responseData["results"];
+            for (int i = 1; i <= monthLength; i++)
+            {
+                DateTime day = new DateTime(date.Year, date.Month, i);
+                bool hasResultForDay = false;
+                foreach (JObject item in results)
+                {
+                    DateTime itemDate = (DateTime)item["date"];
+                    if (itemDate.ToString("MM-dd-yyyy") == day.ToString("MM-dd-yyyy"))
+                    {
+                        hasResultForDay = true;
+                        CalendarDays.Add(new CalendarDay
+                        {
+                            Date = day,
+                            DishId = (int)item["dish_id"],
+                            Name = (string)item["name"],
+                            Completed = (bool)item["completed"]
+                        });
+                        break; // end loop
+                    }
+                }
+
+                if (!hasResultForDay)
+                {
+                    CalendarDays.Add(new CalendarDay
+                    {
+                        Date = day
+                    });
+                }
             }
         }
     }
