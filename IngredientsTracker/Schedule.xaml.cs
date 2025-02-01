@@ -1,4 +1,5 @@
 using IngredientsTracker.ViewModels;
+using System.Diagnostics;
 using static IngredientsTracker.ViewModels.ScheduleVM;
 
 namespace IngredientsTracker;
@@ -12,15 +13,14 @@ public partial class Schedule : ContentPage
         vm = App.ServiceProvider.GetService<ScheduleVM>();
         BindingContext = vm; ;
     }
-    
 
-    public void GoToDish(object sender, EventArgs e)
+    public void OpenAssignDishModal()
     {
 
     }
 
     private void GoToDish(object sender, TappedEventArgs e)
     {
-
+        Debug.WriteLine("Going to dish");
     }
 }

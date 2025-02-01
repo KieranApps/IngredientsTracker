@@ -73,7 +73,8 @@ namespace IngredientsTracker.ViewModels
                 {
                     CalendarDays.Add(new CalendarDay
                     {
-                        Date = day
+                        Date = day,
+                        Name = "None Assigned"
                     });
                 }
             }

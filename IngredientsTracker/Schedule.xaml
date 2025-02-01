@@ -47,19 +47,35 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
             <DataTemplate >
-                <Frame 
-                    Margin="5"
-                    HeightRequest="100"
-                >
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="GoToDish"
-                                CommandParameter="{Binding .}"/>
-                    </Frame.GestureRecognizers>
-                    <Label Text="{Binding Name}"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                    />
-                </Frame>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.75*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition  Height="Auto"/>
+                            <RowDefinition  Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Text="{Binding Date}" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="&#xe3c9;" Grid.Row="0" Grid.Column="1"/>
+                        
+                        <Frame
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="5"
+                            HeightRequest="100"
+                        >
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="GoToDish"
+                                    CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            <Label Text="{Binding Name}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                            />
+                        </Frame>
+                    </Grid>
             </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
