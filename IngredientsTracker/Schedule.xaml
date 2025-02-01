@@ -9,7 +9,7 @@
         <viewmodel:ScheduleVM />
     </ContentPage.BindingContext>
     
-    <VerticalStackLayout>
+    <StackLayout>
         <Grid RowSpacing="5" ColumnSpacing="5" Padding="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.25*"/>
@@ -38,5 +38,31 @@
                 HorizontalTextAlignment="Start"
             />
         </Grid>
-    </VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding CalendarDays}" VerticalOptions="FillAndExpand">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                Span="2"
+                VerticalItemSpacing="10"
+                HorizontalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+            <DataTemplate >
+                <Frame 
+                    Margin="5"
+                    HeightRequest="100"
+                >
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="GoToDish"
+                                CommandParameter="{Binding .}"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="{Binding Name}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                    />
+                </Frame>
+            </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+    </StackLayout>
 </ContentPage>

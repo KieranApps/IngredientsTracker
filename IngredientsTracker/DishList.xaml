@@ -9,7 +9,7 @@
         <viewmodel:DishListVM />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout>
+    <StackLayout>
         <Label
             HorizontalTextAlignment="Center"
             Text="View, add and edit your dishes"
@@ -51,15 +51,14 @@
             </Button>
         </Grid>
         <!-- Tile layout of dishes, can show pictuer of it in background too which could be nice-->
-
-        <CollectionView ItemsSource="{Binding DishTiles}">
+        <CollectionView VerticalOptions="FillAndExpand" VerticalScrollBarVisibility="Always" ItemsSource="{Binding DishTiles}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical"
                     Span="2"
                     VerticalItemSpacing="10"
                     HorizontalItemSpacing="10" />
             </CollectionView.ItemsLayout>
-            
+
             <CollectionView.ItemTemplate>
                 <DataTemplate >
                     <Frame BackgroundColor="{Binding TileColor}"
@@ -78,7 +77,7 @@
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
+
         </CollectionView>
-    </VerticalStackLayout>
+    </StackLayout>
 </ContentPage>

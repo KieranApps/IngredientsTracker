@@ -12,5 +12,15 @@ public partial class Schedule : ContentPage
         vm = App.ServiceProvider.GetService<ScheduleVM>();
         BindingContext = vm; ;
     }
+    
 
+    public void GoToDish(object sender, EventArgs e)
+    {
+
+    }
+
+    private void GoToDish(object sender, TappedEventArgs e)
+    {
+
+    }
 }
