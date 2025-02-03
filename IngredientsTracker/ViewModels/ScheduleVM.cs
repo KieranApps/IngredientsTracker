@@ -12,6 +12,8 @@ namespace IngredientsTracker.ViewModels
         private readonly ApiService _api;
         public ObservableCollection<CalendarDay> CalendarDays { get; set; }
 
+        public ObservableCollection<DishModel> Dishes { get; set; }
+
         public string monthSelected { get; set; }
 
         public ScheduleVM() { }
@@ -20,6 +22,7 @@ namespace IngredientsTracker.ViewModels
             _api = api;
 
             CalendarDays = new ObservableCollection<CalendarDay>();
+            Dishes = new ObservableCollection<DishModel>();
             // Get Current month and year for params
             DateTime today = DateTime.Today;
             monthSelected = today.ToString("MMMM");
@@ -60,7 +63,7 @@ namespace IngredientsTracker.ViewModels
                         hasResultForDay = true;
                         CalendarDays.Add(new CalendarDay
                         {
-                            Date = day,
+                            Date = day.ToString("dd-MM-yyyy"),
                             DishId = (int)item["dish_id"],
                             Name = (string)item["name"],
                             Completed = (bool)item["completed"]
@@ -73,10 +76,27 @@ namespace IngredientsTracker.ViewModels
                 {
                     CalendarDays.Add(new CalendarDay
                     {
-                        Date = day,
+                        Date = day.ToString("dd-MM-yyyy"),
                         Name = "None Assigned"
                     });
                 }
+            }
+        }
+
+        public async Task GetAllDishes()
+        {
+            Dishes.Clear();
+
+            string response = await _api.GetAllDishes();
+            JObject responseData = JObject.Parse(response);
+            foreach (JObject dish in responseData["dishes"])
+            {
+                Dishes.Add(new DishModel
+                {
+                    Id = (int)dish["id"],
+                    Name = (string)dish["name"],
+                    User_Id = (int)dish["user_id"]
+                });
             }
         }
     }

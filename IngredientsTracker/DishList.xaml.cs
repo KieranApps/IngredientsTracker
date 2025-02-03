@@ -28,5 +28,5 @@ public partial class DishList : ContentPage
         dishInfo.SetDish(dish);
         Navigation.PushAsync(dishInfo);
     }
-    
+
 }

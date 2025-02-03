@@ -14,13 +14,28 @@ public partial class Schedule : ContentPage
         BindingContext = vm; ;
     }
 
-    public void OpenAssignDishModal()
-    {
-
-    }
-
     private void GoToDish(object sender, TappedEventArgs e)
     {
         Debug.WriteLine("Going to dish");
+    }
+
+    private async void OpenAssignDishModal(object sender, TappedEventArgs e)
+    {
+        // Get All dishes
+        Debug.WriteLine("OpenModel");
+        await vm.GetAllDishes();
+        DishesModal.IsVisible = true;
+
+    }
+
+    private async void AssignDishToDay(object sender, TappedEventArgs e)
+    {
+        Debug.WriteLine("Assigining");
+        DishesModal.IsVisible = false;
+    }
+
+    private void HideDishModal(object sender, FocusEventArgs e)
+    {
+        DishesModal.IsVisible = false;
     }
 }

@@ -56,14 +56,18 @@
                             <RowDefinition  Height="Auto"/>
                             <RowDefinition  Height="*"/>
                         </Grid.RowDefinitions>
-
-                        <Label Text="{Binding Date}" Grid.Row="0" Grid.Column="0"/>
-                        <Label Text="&#xe3c9;" Grid.Row="0" Grid.Column="1"/>
-                        
+                        <Frame
+                            BackgroundColor="CadetBlue" Grid.Row="0" Grid.ColumnSpan="2"></Frame>
+                        <Label Text="{Binding Date}" HorizontalOptions="Center" FontSize="20" Grid.Row="0" Grid.Column="0"/>
+                        <Label Text="&#xe3c9;" HorizontalOptions="End" FontSize="20" Grid.Row="0" Grid.Column="1">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OpenAssignDishModal" CommandParameter="{Binding .}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <!-- Try an image for the icon -->
                         <Frame
                             Grid.Row="1"
                             Grid.ColumnSpan="2"
-                            Margin="5"
                             HeightRequest="100"
                         >
                             <Frame.GestureRecognizers>
@@ -71,6 +75,7 @@
                                     CommandParameter="{Binding .}"/>
                             </Frame.GestureRecognizers>
                             <Label Text="{Binding Name}"
+                                   FontSize="25"
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                             />
@@ -79,6 +84,26 @@
             </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
+
+        <!-- Here is the modal for assigning a dish to the day -->
+        <CollectionView x:Name="DishesModal"
+                        Unfocused="HideDishModal"
+            IsVisible="False" ItemsSource="{Binding Dishes}"
+            BackgroundColor="#FAFAFA"
+            VerticalOptions="Start"
+        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}" 
+                Padding="10"
+                TextColor="Black">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="AssignDishToDay" 
+                                          CommandParameter="{Binding .}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 </ContentPage>
