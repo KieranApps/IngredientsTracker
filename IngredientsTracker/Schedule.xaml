@@ -46,7 +46,7 @@
                 HorizontalItemSpacing="10" />
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
-            <DataTemplate >
+                <DataTemplate >
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.75*"/>
@@ -81,27 +81,6 @@
                             />
                         </Frame>
                     </Grid>
-            </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <!-- Here is the modal for assigning a dish to the day -->
-        <CollectionView x:Name="DishesModal"
-                        Unfocused="HideDishModal"
-            IsVisible="False" ItemsSource="{Binding Dishes}"
-            BackgroundColor="#FAFAFA"
-            VerticalOptions="Start"
-        >
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Label Text="{Binding Name}" 
-                Padding="10"
-                TextColor="Black">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="AssignDishToDay" 
-                                          CommandParameter="{Binding .}"/>
-                        </Label.GestureRecognizers>
-                    </Label>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

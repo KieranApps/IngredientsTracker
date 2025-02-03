@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace IngredientsTracker.ViewModels
 {
-    partial class ScheduleVM : BindableObject
+    public partial class ScheduleVM : BindableObject
     {
 
         private readonly ApiService _api;

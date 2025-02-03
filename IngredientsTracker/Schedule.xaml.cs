@@ -1,6 +1,7 @@
+using CommunityToolkit.Maui.Views;
+using IngredientsTracker.Modals;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
-using static IngredientsTracker.ViewModels.ScheduleVM;
 
 namespace IngredientsTracker;
 
@@ -24,18 +25,19 @@ public partial class Schedule : ContentPage
         // Get All dishes
         Debug.WriteLine("OpenModel");
         await vm.GetAllDishes();
-        DishesModal.IsVisible = true;
+        var popup = new DishListModal(vm);
+        await this.ShowPopupAsync(popup);
 
     }
 
     private async void AssignDishToDay(object sender, TappedEventArgs e)
     {
         Debug.WriteLine("Assigining");
-        DishesModal.IsVisible = false;
+        
     }
 
     private void HideDishModal(object sender, FocusEventArgs e)
     {
-        DishesModal.IsVisible = false;
+        
     }
 }
