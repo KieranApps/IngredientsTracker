@@ -16,7 +16,33 @@ namespace IngredientsTracker.ViewModels
 
         public ObservableCollection<DishModel> Dishes { get; set; }
 
-        public string monthSelected { get; set; }
+        private string _monthSelected;
+        public string MonthSelected
+        {
+            get => _monthSelected;
+            set
+            {
+                if (_monthSelected != value)
+                {
+                    _monthSelected = value;
+                    OnPropertyChanged(nameof(MonthSelected));
+                }
+            }
+        }
+        private string _yearSelected;
+        public string YearSelected
+        {
+            get => _yearSelected;
+            set
+            {
+                if (_yearSelected != value)
+                {
+                    _yearSelected = value;
+                    OnPropertyChanged(nameof(YearSelected));
+                }
+            }
+        }
+        public DateTime selectedDateYearMonth { get; set; }
 
         public ScheduleVM() { }
         public ScheduleVM(ApiService api)
@@ -27,9 +53,26 @@ namespace IngredientsTracker.ViewModels
             Dishes = new ObservableCollection<DishModel>();
             // Get Current month and year for params
             DateTime today = DateTime.Today;
-            monthSelected = today.ToString("MMMM");
-            Debug.WriteLine(monthSelected);
+            MonthSelected = today.ToString("MMMM");
+            YearSelected = today.ToString("yyyy");
+            selectedDateYearMonth = today;
             GetDishScheduleForMonth(today);
+        }
+
+        public void GoToPreviousMonth()
+        {
+            selectedDateYearMonth = selectedDateYearMonth.AddMonths(-1);
+            MonthSelected = selectedDateYearMonth.ToString("MMMM");
+            YearSelected = selectedDateYearMonth.ToString("yyyy");
+            GetDishScheduleForMonth(selectedDateYearMonth);
+        }
+
+        public void GoToNextMonth()
+        {
+            selectedDateYearMonth = selectedDateYearMonth.AddMonths(1);
+            MonthSelected = selectedDateYearMonth.ToString("MMMM");
+            YearSelected = selectedDateYearMonth.ToString("yyyy");
+            GetDishScheduleForMonth(selectedDateYearMonth);
         }
 
         // This function will be used for setting the month shown on the calendar as well as getting the dishes for that month
@@ -50,7 +93,7 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
-
+            CalendarDays.Clear();
             // Loop for month length filing in schedule (leave data blank if nothign for that date in response
             JArray results = (JArray)responseData["results"];
             for (int i = 1; i <= monthLength; i++)

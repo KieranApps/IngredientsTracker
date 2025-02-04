@@ -22,21 +22,35 @@
                 Text="&#xef7d;"
                 FontSize="36"
                 HorizontalTextAlignment="End"
-            />
+            >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GoToPreviousMonth"/>
+                </Label.GestureRecognizers>
+            </Label>
             <Label
                 Grid.Column="1"
                 TextColor="Black"
-                Text="{Binding monthSelected}"
                 FontSize="36"
                 HorizontalTextAlignment="Center"
-            />
+            >
+                <Label.Text>
+                    <MultiBinding StringFormat="{}{0} - {1}">
+                        <Binding Path="YearSelected" />
+                        <Binding Path="MonthSelected" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
             <Label
                 Grid.Column="2"
                 TextColor="Black"
                 Text="&#xe941;"
                 FontSize="36"
                 HorizontalTextAlignment="Start"
-            />
+            >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="GotToNextMonth"/>
+                </Label.GestureRecognizers>
+            </Label>
         </Grid>
         <CollectionView ItemsSource="{Binding CalendarDays}" VerticalOptions="FillAndExpand">
             <CollectionView.ItemsLayout>

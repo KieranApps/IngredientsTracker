@@ -13,7 +13,7 @@ public partial class Schedule : ContentPage
 	{
 		InitializeComponent();
         vm = App.ServiceProvider.GetService<ScheduleVM>();
-        BindingContext = vm; ;
+        BindingContext = vm;
     }
 
     private void GoToDish(object sender, TappedEventArgs e)
@@ -35,5 +35,16 @@ public partial class Schedule : ContentPage
     private void HideDishModal(object sender, FocusEventArgs e)
     {
         
+    }
+
+    private void GoToPreviousMonth(object sender, TappedEventArgs e)
+    {
+        vm.GoToPreviousMonth();
+    }
+
+    private async void GotToNextMonth(object sender, TappedEventArgs e)
+    {
+        Debug.WriteLine("Here");
+        vm.GoToNextMonth();
     }
 }
