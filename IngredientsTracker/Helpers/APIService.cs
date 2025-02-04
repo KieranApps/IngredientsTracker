@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
+using IngredientsTracker.Data;
 
 namespace IngredientsTracker.Helpers
 {
@@ -363,7 +364,8 @@ namespace IngredientsTracker.Helpers
                 {
                     if (response.StatusCode.ToString() == "Unauthorized")
                     {
-                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
                         response = await RetryRequest(freshRequest);
                         if (!response.IsSuccessStatusCode)
                         {
@@ -426,7 +428,7 @@ namespace IngredientsTracker.Helpers
             try
             {
                 string user_id = await _userService.getUserId();
-                Uri uri = new Uri(host + "/schedule/" + user_id + "/" + startDate.ToString("MM-dd-yyyy") + "/" + endDate.ToString("MM-dd-yyyy"));
+                Uri uri = new Uri(host + "/schedule/" + user_id + "/" + startDate.ToString("yyyy-MM-dd") + "/" + endDate.ToString("yyyy-MM-dd"));
                 var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
                 string token = await _tokenHandler.GetAccessToken();
@@ -438,6 +440,102 @@ namespace IngredientsTracker.Helpers
                     if (response.StatusCode.ToString() == "Unauthorized")
                     {
                         var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
+        public async Task<string> AddDishToSchedule(int dish_id, string date)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/schedule/add");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var body = new
+                {
+                    user_id,
+                    dish_id,
+                    date
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
+        public async Task<string> EditDishOnSchedule(int dish_id, string date)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/schedule/edit");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var body = new
+                {
+                    user_id,
+                    dish_id,
+                    date
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
                         response = await RetryRequest(freshRequest);
                         if (!response.IsSuccessStatusCode)
                         {

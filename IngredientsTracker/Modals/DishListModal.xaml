@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <Label
                 Grid.Row="0"
-                Text="Tap a dish to assing to this day!"
+                Text="Tap a dish to assign to this day!"
                 FontAttributes="Bold"
                 HorizontalOptions="Center" />
 
@@ -32,9 +32,13 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Label
-                                Text="{Binding Name}" 
-                                Padding="10"
-                                TextColor="Black">
+                            Text="{Binding Name}" 
+                            Padding="10"
+                            TextColor="Black">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDishTapped" 
+                                    CommandParameter="{Binding .}"/>
+                            </Label.GestureRecognizers>
                         </Label>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

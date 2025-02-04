@@ -1,4 +1,6 @@
 ﻿using SQLite;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace IngredientsTracker.Data
 {
@@ -67,11 +69,58 @@ namespace IngredientsTracker.Data
 
     }
 
-    public class CalendarDay
+    public class CalendarDay : INotifyPropertyChanged
     {
         public string Date { get; set; }
-        public string Name { get; set; }
-        public int DishId { get; set; }
-        public bool Completed { get; set; }
+        public string DateNumber { get; set; }
+        public string DateDay { get; set; }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _dishId;
+        public int DishId
+        {
+            get => _dishId;
+            set
+            {
+                if (_dishId != value)
+                {
+                    _dishId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _completed;
+        public bool Completed
+        {
+            get => _completed;
+            set
+            {
+                if (_completed != value)
+                {
+                    _completed = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

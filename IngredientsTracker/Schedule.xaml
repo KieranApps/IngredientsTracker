@@ -58,7 +58,14 @@
                         </Grid.RowDefinitions>
                         <Frame
                             BackgroundColor="CadetBlue" Grid.Row="0" Grid.ColumnSpan="2"></Frame>
-                        <Label Text="{Binding Date}" HorizontalOptions="Center" FontSize="20" Grid.Row="0" Grid.Column="0"/>
+                        <Label HorizontalOptions="Center" FontSize="20" Grid.Row="0" Grid.Column="0">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="DateNumber" />
+                                    <Binding Path="DateDay" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
                         <Label Text="&#xe3c9;" HorizontalOptions="End" FontSize="20" Grid.Row="0" Grid.Column="1">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OpenAssignDishModal" CommandParameter="{Binding .}"/>

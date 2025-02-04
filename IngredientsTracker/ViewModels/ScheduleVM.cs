@@ -1,8 +1,10 @@
 ﻿using IngredientsTracker.Data;
 using IngredientsTracker.Helpers;
+using Microsoft.Maui.Controls;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace IngredientsTracker.ViewModels
 {
@@ -58,12 +60,14 @@ namespace IngredientsTracker.ViewModels
                 foreach (JObject item in results)
                 {
                     DateTime itemDate = (DateTime)item["date"];
-                    if (itemDate.ToString("MM-dd-yyyy") == day.ToString("MM-dd-yyyy"))
+                    if (itemDate.ToString("yyyy-MM-dd") == day.ToString("yyyy-MM-dd"))
                     {
                         hasResultForDay = true;
                         CalendarDays.Add(new CalendarDay
                         {
-                            Date = day.ToString("dd-MM-yyyy"),
+                            Date = day.ToString("yyyy-MM-dd"),
+                            DateNumber = day.ToString("dd"),
+                            DateDay = day.ToString("dddd"),
                             DishId = (int)item["dish_id"],
                             Name = (string)item["name"],
                             Completed = (bool)item["completed"]
@@ -76,7 +80,9 @@ namespace IngredientsTracker.ViewModels
                 {
                     CalendarDays.Add(new CalendarDay
                     {
-                        Date = day.ToString("dd-MM-yyyy"),
+                        Date = day.ToString("yyyy-MM-dd"),
+                        DateNumber = day.ToString("dd"),
+                        DateDay = day.ToString("dddd"),
                         Name = "None Assigned"
                     });
                 }
@@ -98,6 +104,39 @@ namespace IngredientsTracker.ViewModels
                     User_Id = (int)dish["user_id"]
                 });
             }
+        }
+
+        public async Task<bool> AddDishToSchedule(DishModel dish, CalendarDay day)
+        {
+            string response = string.Empty;
+            if (day.Name == "None Assigned") // Add new, else edit
+            {
+                response = await _api.AddDishToSchedule(dish.Id, day.Date);
+            } else
+            {
+                response = await _api.EditDishOnSchedule(dish.Id, day.Date);
+            }
+
+            if (string.IsNullOrEmpty(response))
+            {
+                return false;
+            }
+
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return false;
+            }
+
+            // Get this day and update
+            CalendarDay? item = CalendarDays.FirstOrDefault(x => x.Date == day.Date);
+            item.Name = dish.Name;
+            item.DishId = dish.Id;
+            item.Completed = false;
+
+            return true;
         }
     }
 }

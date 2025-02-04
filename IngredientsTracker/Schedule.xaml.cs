@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using IngredientsTracker.Data;
 using IngredientsTracker.Modals;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
@@ -23,17 +24,12 @@ public partial class Schedule : ContentPage
     private async void OpenAssignDishModal(object sender, TappedEventArgs e)
     {
         // Get All dishes
-        Debug.WriteLine("OpenModel");
         await vm.GetAllDishes();
-        var popup = new DishListModal(vm);
+        Label label = (Label)sender;
+        var tapGesture = (TapGestureRecognizer)label.GestureRecognizers.FirstOrDefault();
+        var day = tapGesture.CommandParameter as CalendarDay;
+        var popup = new DishListModal(vm, day);
         await this.ShowPopupAsync(popup);
-
-    }
-
-    private async void AssignDishToDay(object sender, TappedEventArgs e)
-    {
-        Debug.WriteLine("Assigining");
-        
     }
 
     private void HideDishModal(object sender, FocusEventArgs e)
