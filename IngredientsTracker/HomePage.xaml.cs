@@ -29,6 +29,12 @@ namespace IngredientsTracker
             Navigation.PushAsync(schedule);
         }
 
+        private void ViewStock(object sender, EventArgs e)
+        {
+            var schedule = App.ServiceProvider.GetService<StockList>();
+            Navigation.PushAsync(schedule);
+        }
+
         //private void ViewAllIngredients(object sender, EventArgs e)
         //{
         //    Navigation.PushAsync(new IngredientsList(_db));

@@ -25,15 +25,15 @@
                 Clicked="ViewSchedule"
                 HorizontalOptions="Fill"
             />  
-        <!--
-
             <Button 
-                x:Name="ViewAllIngredientsButton"
-                Text="View Ingredients"
-                SemanticProperties.Hint="View All Ingredients"
-                Clicked=""
+                x:Name="ViewStockButton"
+                Text="View Your Current Stock"
+                SemanticProperties.Hint="View Your Stock"
+                Clicked="ViewStock"
                 HorizontalOptions="Fill"
             />
+        <!--
+
 
             <Button 
                 x:Name="ViewShoppingListButton"
