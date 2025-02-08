@@ -347,8 +347,11 @@ namespace IngredientsTracker.Helpers
                 string token = await _tokenHandler.GetAccessToken();
                 request.Headers.Add("token", token);
 
+                string user_id = await _userService.getUserId();
+
                 var body = new
                 {
+                    user_id,
                     dish_id,
                     ingredient_id,
                     amount,
@@ -382,6 +385,7 @@ namespace IngredientsTracker.Helpers
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 return "{success: false}";
             }
         }

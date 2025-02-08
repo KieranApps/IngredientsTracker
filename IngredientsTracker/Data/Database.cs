@@ -9,14 +9,15 @@ namespace IngredientsTracker.Data
         public Database(string dbPath)
         {
 
-            _database = new SQLiteAsyncConnection(dbPath);
-            //_database.CreateTableAsync<DishModel>().Wait(); // Copy this for any other model/table
+            //_database = new SQLiteAsyncConnection(dbPath);
+            //_database.CreateTableAsync<DishModel>().Wait();
             //_database.CreateTableAsync<IngredientsModel>().Wait();
             //_database.CreateTableAsync<IngredientDishModel>().Wait();
             //_database.CreateTableAsync<ShoppingList>().Wait();
             //_database.CreateTableAsync<Schedule>().Wait();
         }
 
+/**
         // Generic Save, should work for all saves of items
         public Task<int> SaveItemAsync<T>(T item) where T : new()
         {
@@ -86,5 +87,6 @@ namespace IngredientsTracker.Data
             DateTime end = new DateTime(year, month, monthLength);
             return _database.Table<Schedule>().Where(x => x.Date > start && x.Date < end).ToListAsync();
         }
+*/
     }
 }
