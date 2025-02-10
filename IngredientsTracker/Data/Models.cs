@@ -26,7 +26,7 @@ namespace IngredientsTracker.Data
     {
         public int Id { get; set; }
         public int DishId { get; set; }
-        public string IngredientId { get; set; }
+        public int IngredientId { get; set; }
         public string Amount { get; set; }
         public string UnitId { get; set; }
         public string IngredientName { get; set; }
@@ -35,7 +35,7 @@ namespace IngredientsTracker.Data
 
     public class IngredientSearchResult
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 
@@ -122,5 +122,15 @@ namespace IngredientsTracker.Data
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class StockItem
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public int IngredientId { get; set; }
+        public float Amount { get; set; }
+        public int UnitId { get; set; }
+        public string Unit { get; set; }
     }
 }

@@ -305,7 +305,8 @@ namespace IngredientsTracker.Helpers
         {
             try
             {
-                Uri uri = new Uri(host + "/ingredients/search/" + term);
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/ingredients/search/" + user_id + "/" + term);
                 var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
                 string token = await _tokenHandler.GetAccessToken();
@@ -337,7 +338,7 @@ namespace IngredientsTracker.Helpers
             }
         }
 
-        public async Task<string> SubmitIngredient(int dish_id, string ingredient_id, string amount, string unit_id)
+        public async Task<string> SubmitIngredient(int dish_id, int ingredient_id, string amount, string unit_id)
         {
             try
             {

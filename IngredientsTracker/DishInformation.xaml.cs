@@ -58,6 +58,12 @@ public partial class DishInformation : ContentPage
         vm.NewSelectedIngredient = chosenIngredient;
         vm.NewIngredient = chosenIngredient.Name;
 
+        bool inStock = vm.FindIngredientInStock();
+        if (!inStock)
+        {
+            vm.ResetUnits();
+        } 
+
         SearchResultsCollectionView.IsVisible = false;
         SearchResultsCollectionView.InputTransparent = true;
         vm.optionSelected = true;

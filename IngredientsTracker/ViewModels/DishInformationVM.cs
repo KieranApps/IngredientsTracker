@@ -14,11 +14,12 @@ namespace IngredientsTracker.ViewModels
         public ObservableCollection<IngredientSearchResult> SearchResults { get; set; }
         public event EventHandler<IEnumerable<IngredientSearchResult>> SearchResultsReady;
 
+        public List<StockItem> StockItems { get; set; }
+        public JObject UnitMapping { get; set; }
+
         public bool optionSelected = false;
 
         public DishModel CurrentDish;
-
-        public JArray unitNameIdMap;
 
         // Property for the new dish name input
         private string _newIngredient;
@@ -44,6 +45,8 @@ namespace IngredientsTracker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private JArray AllUnits { get; set; }
 
         private ObservableCollection<string> _units;
         public ObservableCollection<string> Units
@@ -73,6 +76,9 @@ namespace IngredientsTracker.ViewModels
             _api = api;
             Ingredients = new ObservableCollection<DishIngredientsList>();
             SearchResults = new ObservableCollection<IngredientSearchResult>();
+            StockItems = new List<StockItem>();
+            AllUnits = new JArray();
+            UnitMapping = new JObject();
             LoadUnits();
         }
 
@@ -100,7 +106,7 @@ namespace IngredientsTracker.ViewModels
             foreach (JObject ingredient in ingredients)
             {
                 string unitName = string.Empty;
-                foreach (var unit in unitNameIdMap)
+                foreach (var unit in AllUnits)
                 {
                     if ((string)unit["id"] == (string)ingredient["unit_id"])
                     {
@@ -112,7 +118,7 @@ namespace IngredientsTracker.ViewModels
                 {
                     Id = (int)ingredient["id"],
                     DishId = (int)ingredient["dish_id"],
-                    IngredientId = (string)ingredient["ingredient_id"],
+                    IngredientId = (int)ingredient["ingredient_id"],
                     Amount = (string)ingredient["amount"],
                     UnitId = (string)ingredient["unit_id"],
                     IngredientName = (string)ingredient["ingredient_name"],
@@ -132,12 +138,20 @@ namespace IngredientsTracker.ViewModels
                 // error message
                 return;
             }
-            string unitsAsString = responseData["units"].ToString(); // Save so we can get the ID for the unit when submitting
-            unitNameIdMap = JArray.Parse(unitsAsString);
-
             Units = new ObservableCollection<string>();
+            AllUnits = (JArray)responseData["units"];
+            UnitMapping = (JObject)responseData["unitMapping"];
             // Assign units to variable for Binding
             foreach (JObject entry in responseData["units"])
+            {
+                Units.Add((string)entry["unit"]);
+            }
+        }
+
+        public void ResetUnits()
+        {
+            Units.Clear();
+            foreach (JObject entry in AllUnits)
             {
                 Units.Add((string)entry["unit"]);
             }
@@ -169,8 +183,20 @@ namespace IngredientsTracker.ViewModels
             {
                 SearchResults.Add(new IngredientSearchResult
                 {
-                    Id = (string)entry["id"],
+                    Id = (int)entry["id"],
                     Name = (string)entry["name"]
+                });
+            }
+            foreach (var item in responseData["stockMatchInfo"])
+            {
+                StockItems.Add(new StockItem
+                {
+                    Id = (int)item["id"],
+                    UserId = (int)item["user_id"],
+                    IngredientId = (int)item["ingredient_id"],
+                    Amount = (float)item["amount"],
+                    UnitId = (int)item["unit_id"],
+                    Unit = (string)item["unit"]
                 });
             }
 
@@ -178,6 +204,33 @@ namespace IngredientsTracker.ViewModels
             {
                 SearchResultsReady?.Invoke(this, SearchResults);
             }
+        }
+
+        public bool FindIngredientInStock()
+        {
+            //NewSelectedIngredient <- use this
+            int ingId = NewSelectedIngredient.Id;
+            StockItem item = StockItems.Find(x => x.IngredientId == ingId);
+            if (item == null)
+            {
+                return false; // No ingredient in stock, so allow any unit
+            }
+            // We have ingredient in stock, so filter the units to the current one in the stock and all convertable using the mapping
+            Units.Clear();
+
+            Units.Add(item.Unit);
+            JObject convertibles = (JObject)UnitMapping[item.Unit];
+            if (convertibles == null)
+            {
+                ChosenUnit = item.Unit;
+                return true; // No convertibles, but we have the unit from the stock, so allow only that
+            }
+            foreach (var unit in convertibles)
+            {
+                Units.Add(unit.Key);
+            }
+
+            return true;
         }
 
         public async Task<bool> SubmitNewIngredient()
@@ -194,7 +247,7 @@ namespace IngredientsTracker.ViewModels
             // Get ChosenUnit ID
             string unitId = "";
             string unitName = string.Empty;
-            foreach (var unit in unitNameIdMap)
+            foreach (var unit in AllUnits)
             {
                 if ((string)unit["unit"] == ChosenUnit)
                 {
@@ -230,7 +283,7 @@ namespace IngredientsTracker.ViewModels
             NewIngredientAmount = "";
             ChosenUnit = "";
             SearchResults.Clear();
-            
+            ResetUnits();
             return true;
         }
     }
