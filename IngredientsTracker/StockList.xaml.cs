@@ -76,4 +76,9 @@ public partial class StockList : ContentPage
         StockItem item = entry.ReturnCommandParameter as StockItem;
         await vm.EditStockItem(item);
     }
+
+    private void OpenUnitModal(object sender, TappedEventArgs e)
+    {
+        Debug.WriteLine("Open the modal with units to edit this one, also say have the warning at the top of the modla");
+    }
 }

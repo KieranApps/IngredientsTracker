@@ -115,7 +115,11 @@
                             <!-- Use Binding .  so we can just get what we need from the whole StockItem for saving, ID, amount, unit etc...-->
                             <Entry Grid.Column="1" HorizontalTextAlignment="End" Text="{Binding Amount, Mode=TwoWay}" 
                                    ReturnCommandParameter="{Binding .}" Unfocused="AmountChanged" />
-                            <Label Grid.Column="2" HorizontalTextAlignment="Start" Text="{Binding Unit}" Padding="10" />
+                            <Label Grid.Column="2" HorizontalTextAlignment="Start" Text="{Binding Unit, StringFormat='{0} &#xe3c9;' }" Padding="10" >
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenUnitModal" CommandParameter="{Binding .}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
                             <Label Grid.Column="4"  Text="&#xe872;" Padding="10" />
                         </Grid>
                     </DataTemplate>
