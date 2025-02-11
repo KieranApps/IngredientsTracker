@@ -9,10 +9,138 @@
     <ContentPage.BindingContext>
         <viewmodel:StockListVM />
     </ContentPage.BindingContext>
-    <VerticalStackLayout>
-        <Label 
-            Text="Stock List!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid
+    Padding="10"
+    ColumnSpacing="10"
+    RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="0.1*" />
+        </Grid.ColumnDefinitions>
+
+        <Entry
+            Grid.Row="0"
+            Grid.Column="0"
+            TextColor="Black"
+            Text="{Binding NewIngredient}"
+            TextChanged="OnIngredientEntryTextChanged"
+            Placeholder="Enter Ingredient"
+            PlaceholderColor="DarkGray"
+            Unfocused="IngredientEntryUnfocused"
+        />
+        <Entry
+            Grid.Row="0"
+            Grid.Column="1"
+            TextColor="Black"
+            Text="{Binding NewIngredientAmount}"
+            Placeholder="Enter Ingredient Amount (Numbers only!)"
+            PlaceholderColor="DarkGray"
+        />
+        <Picker
+            x:Name="UnitPicker"
+            BackgroundColor="Gray"
+            Grid.Row="0"
+            Grid.Column="2"
+            ItemsSource="{Binding Units}"
+            ItemDisplayBinding="{Binding .}"
+            SelectedItem="{Binding ChosenUnit, Mode=TwoWay}">
+        </Picker>
+
+        <Button
+            Grid.Row="0"
+            Grid.Column="3"
+            TextColor="White"
+            BackgroundColor="LightBlue"
+            FontAttributes="Bold"
+            Text="Submit"
+            Clicked="SubmitIngredient"
+        >
+            <Button.Shadow>
+                <Shadow Brush="LightBlue"
+                    Offset="0,0"
+                    Radius="40"
+                    Opacity="0.7"
+                />
+            </Button.Shadow>
+        </Button>
+
+
+        <!-- Area for saved ingrediets -->
+        <Border  
+                StrokeShape="RoundRectangle 12"
+                StrokeThickness="2"
+                Stroke="LightGray"
+                Padding="0"
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                BackgroundColor="#FDFDFD">
+
+            <CollectionView
+                ItemsSource="{Binding StockItems}"
+                    x:Name="IngredientList"
+                    BackgroundColor="Transparent">
+                <CollectionView.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.4*" />
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="0.2*" />
+                            <ColumnDefinition Width="0.1*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Padding="10" Text="Name" Grid.Column="0"/>
+                        <Label Padding="10" HorizontalTextAlignment="End" Text="No." Grid.Column="1"/>
+                        <Label Padding="10" HorizontalTextAlignment="Start" Text="Unit" Grid.Column="2"/>
+                    </Grid>
+                </CollectionView.Header>
+                <!-- For example: existing dish ingredients -->
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.4*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.1*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding Ingredient}" Padding="10" />
+                            <!-- Use Binding .  so we can just get what we need from the whole StockItem for saving, ID, amount, unit etc...-->
+                            <Entry Grid.Column="1" HorizontalTextAlignment="End" Text="{Binding ., Mode=TwoWay}" Unfocused="AmountChanged" />
+                            <Label Grid.Column="2" HorizontalTextAlignment="Start" Text="{Binding .}" Padding="10" />
+                            <Label Grid.Column="4"  Text="&#xe872;" Padding="10" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+
+        <CollectionView x:Name="SearchResultsCollectionView"
+            IsVisible="False"
+            BackgroundColor="#FAFAFA"
+            Grid.Row="1" Grid.ColumnSpan="1"
+            VerticalOptions="Start"
+            HeightRequest="300"
+        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}" 
+                        Padding="10"
+                        TextColor="Black">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnResultTapped" 
+                                                  CommandParameter="{Binding .}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>

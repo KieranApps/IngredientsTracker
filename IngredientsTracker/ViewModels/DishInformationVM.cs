@@ -99,8 +99,7 @@ namespace IngredientsTracker.ViewModels
                 return;
             }
 
-            string ingredientsAsString = responseData["ingredients"].ToString(); // Save so we can get the ID for the unit when submitting
-            JArray ingredients = JArray.Parse(ingredientsAsString);
+            JArray ingredients = (JArray)responseData["ingredients"];
 
             // Assign units to variable for Binding
             foreach (JObject ingredient in ingredients)
@@ -194,7 +193,7 @@ namespace IngredientsTracker.ViewModels
                     Id = (int)item["id"],
                     UserId = (int)item["user_id"],
                     IngredientId = (int)item["ingredient_id"],
-                    Amount = (float)item["amount"],
+                    Amount = (string)item["amount"],
                     UnitId = (int)item["unit_id"],
                     Unit = (string)item["unit"]
                 });

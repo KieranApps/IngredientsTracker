@@ -391,6 +391,58 @@ namespace IngredientsTracker.Helpers
             }
         }
 
+        public async Task<string> SubmitStockIngredient(int ingredient_id, string amount, int unit_id)
+        {
+            try
+            {
+                Uri uri = new Uri(host + "/stock/add");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                string user_id = await _userService.getUserId();
+
+                var body = new
+                {
+                    user_id,
+                    ingredient_id,
+                    amount,
+                    unit_id
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return "{success: false}";
+            }
+        }
+
         public async Task<string> GetIngredientsForDish(int dish_id)
         {
             try
@@ -560,6 +612,44 @@ namespace IngredientsTracker.Helpers
                 return "{success: false}";
             }
         }
+
+        public async Task<string> GetStock()
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/stock/" + user_id);
+                var request = new HttpRequestMessage(HttpMethod.Get, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Get, uri);
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
 
     }
 }

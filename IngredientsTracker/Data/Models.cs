@@ -129,7 +129,8 @@ namespace IngredientsTracker.Data
         public int Id { get; set; }
         public int UserId { get; set; }
         public int IngredientId { get; set; }
-        public float Amount { get; set; }
+        public string Ingredient { get; set; }
+        public string Amount { get; set; }
         public int UnitId { get; set; }
         public string Unit { get; set; }
     }
