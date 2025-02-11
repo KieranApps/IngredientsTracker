@@ -213,11 +213,13 @@ namespace IngredientsTracker.ViewModels
             UserService us = new UserService();
             string userId = await us.getUserId();
             int user_id = int.Parse(userId);
-            // Add to IngredientList and then remove form new params
+
             StockItems.Add(new StockItem
             {
                 Id = (int)responseData["result"],
                 UserId = user_id,
+                IngredientId = NewSelectedIngredient.Id,
+                Ingredient = NewSelectedIngredient.Name,
                 Amount = NewIngredientAmount,
                 UnitId = unitId,
                 Unit = unitName
@@ -229,5 +231,11 @@ namespace IngredientsTracker.ViewModels
             SearchResults.Clear();
             return true;
         }
+
+        public async Task EditStockItem(StockItem stockItem)
+        {
+            Debug.WriteLine(stockItem.Id + stockItem.Ingredient + stockItem.Amount);
+        }
+
     }
 }

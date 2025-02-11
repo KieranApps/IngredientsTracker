@@ -40,9 +40,15 @@ public partial class StockList : ContentPage
         }, null, pauseTime, Timeout.Infinite);
     }
 
-    private void SubmitIngredient(object sender, EventArgs e)
+    private async void SubmitIngredient(object sender, EventArgs e)
     {
+        bool success = await vm.SubmitNewIngredient();
 
+        if (!success)
+        {
+            Debug.WriteLine("Error submitting");
+            // error message
+        }
     }
 
     private void OnResultTapped(object sender, TappedEventArgs e)
@@ -60,11 +66,14 @@ public partial class StockList : ContentPage
 
     private void IngredientEntryUnfocused(object sender, FocusEventArgs e)
     {
-
+        SearchResultsCollectionView.IsVisible = false;
+        SearchResultsCollectionView.InputTransparent = true;
     }
 
-    private void AmountChanged(object sender, FocusEventArgs e)
+    private async void AmountChanged(object sender, FocusEventArgs e)
     {
-        Debug.WriteLine("Here");
+        Entry entry = (Entry)sender;
+        StockItem item = entry.ReturnCommandParameter as StockItem;
+        await vm.EditStockItem(item);
     }
 }
