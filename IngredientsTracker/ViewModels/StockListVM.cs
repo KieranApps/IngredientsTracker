@@ -235,6 +235,7 @@ namespace IngredientsTracker.ViewModels
         public async Task EditStockItem(StockItem stockItem)
         {
             Debug.WriteLine(stockItem.Id + stockItem.Ingredient + stockItem.Amount);
+            // See if there is a way to check the before and after of an edited item
         }
 
     }

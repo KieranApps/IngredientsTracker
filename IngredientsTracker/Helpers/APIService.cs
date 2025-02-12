@@ -650,6 +650,104 @@ namespace IngredientsTracker.Helpers
             }
         }
 
+        public async Task<string> EditStock(int ingredient_id, float amount)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/stock/edit");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
 
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+
+                var body = new
+                {
+                    user_id,
+                    ingredient_id,
+                    amount
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
+        public async Task<string> EditStock(int ingredient_id, int unit_id, string unit)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/stock/edit");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+                var unitInfo = new
+                {
+                    unit_id,
+                    unit
+                };
+                var body = new
+                {
+                    user_id,
+                    ingredient_id,
+                    unitInfo
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
     }
 }
