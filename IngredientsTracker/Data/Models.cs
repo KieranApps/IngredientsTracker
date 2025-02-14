@@ -124,14 +124,44 @@ namespace IngredientsTracker.Data
         }
     }
 
-    public class StockItem
+    public class StockItem : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public int UserId { get; set; }
         public int IngredientId { get; set; }
         public string Ingredient { get; set; }
         public string Amount { get; set; }
-        public int UnitId { get; set; }
-        public string Unit { get; set; }
+
+        private int _unitId;
+        public int UnitId
+        {
+            get => _unitId;
+            set
+            {
+                if (_unitId != value)
+                {
+                    _unitId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private string _unit;
+        public string Unit
+        {
+            get => _unit;
+            set
+            {
+                if (_unit != value)
+                {
+                    _unit = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

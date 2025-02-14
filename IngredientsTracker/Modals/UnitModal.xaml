@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Name="UnitModalName"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewmodel="clr-namespace:IngredientsTracker.ViewModels"
+    x:Class="IngredientsTracker.Modals.UnitModal">
+
+    <Border
+        Padding="20"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        BackgroundColor="White"
+    >
+        <Grid RowSpacing="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Label
+                Grid.Row="0"
+                Text="Editing a unit may affect this ingredients unit for ALL dishes!"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding Units}"
+                BackgroundColor="#FAFAFA"
+            >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label
+                            Text="{Binding .}" 
+                            Padding="10"
+                            TextColor="Black">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnUnitTapped" 
+                                    CommandParameter="{Binding .}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Border>
+
+</toolkit:Popup>

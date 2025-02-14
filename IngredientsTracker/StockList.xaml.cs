@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Views;
 using IngredientsTracker.Data;
+using IngredientsTracker.Modals;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
 
@@ -77,8 +79,12 @@ public partial class StockList : ContentPage
         await vm.EditStockItem(item);
     }
 
-    private void OpenUnitModal(object sender, TappedEventArgs e)
+    private async void OpenUnitModal(object sender, TappedEventArgs e)
     {
-        Debug.WriteLine("Open the modal with units to edit this one, also say have the warning at the top of the modla");
+        Label label = (Label)sender;
+        var tapGesture = (TapGestureRecognizer)label.GestureRecognizers.FirstOrDefault();
+        var item = tapGesture.CommandParameter as StockItem;
+        var popup = new UnitModal(vm, item);
+        await this.ShowPopupAsync(popup);
     }
 }

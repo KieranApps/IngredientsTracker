@@ -238,5 +238,34 @@ namespace IngredientsTracker.ViewModels
             // See if there is a way to check the before and after of an edited item
         }
 
+        public async Task<bool> EditStockItem(StockItem item, string unit)
+        {
+            int unitId = -1;
+            string unitName = string.Empty;
+            foreach (var details in AllUnits)
+            {
+                if ((string)details["unit"] == unit)
+                {
+                    unitId = (int)details["id"];
+                    unitName = (string)details["unit"];
+                }
+            }
+
+            string response = await _api.EditStock(item.IngredientId, unitId, unitName);
+
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                return false;
+            }
+
+            // Update the collection
+            StockItem? itemToUpdate = StockItems.FirstOrDefault(x => x.Id == item.Id);
+            itemToUpdate.Unit = unitName;
+            itemToUpdate.UnitId = unitId;
+            return true;
+        }
+
     }
 }

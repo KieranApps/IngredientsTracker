@@ -85,6 +85,9 @@
     <MauiXaml Update="Modals\DishListModal.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Modals\UnitModal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Schedule.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
