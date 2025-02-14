@@ -232,10 +232,18 @@ namespace IngredientsTracker.ViewModels
             return true;
         }
 
-        public async Task EditStockItem(StockItem stockItem)
+        public async Task<bool> EditStockItem(StockItem stockItem)
         {
-            Debug.WriteLine(stockItem.Id + stockItem.Ingredient + stockItem.Amount);
             // See if there is a way to check the before and after of an edited item
+            string response = await _api.EditStock(stockItem.IngredientId, stockItem.Amount);
+
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<bool> EditStockItem(StockItem item, string unit)

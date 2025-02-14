@@ -650,7 +650,7 @@ namespace IngredientsTracker.Helpers
             }
         }
 
-        public async Task<string> EditStock(int ingredient_id, float amount)
+        public async Task<string> EditStock(int ingredient_id, string amount)
         {
             try
             {

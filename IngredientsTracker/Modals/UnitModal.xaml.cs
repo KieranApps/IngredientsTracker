@@ -32,6 +32,9 @@ public partial class UnitModal : Popup
         if (success)
         {
             Close();
+        }  else
+        {
+            // Error message
         }
     }
 }

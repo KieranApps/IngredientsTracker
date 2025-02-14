@@ -76,7 +76,13 @@ public partial class StockList : ContentPage
     {
         Entry entry = (Entry)sender;
         StockItem item = entry.ReturnCommandParameter as StockItem;
-        await vm.EditStockItem(item);
+        bool success = await vm.EditStockItem(item);
+
+        if (!success) 
+        {
+            // Error message
+        }
+
     }
 
     private async void OpenUnitModal(object sender, TappedEventArgs e)
