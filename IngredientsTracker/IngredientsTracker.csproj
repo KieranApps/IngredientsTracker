@@ -91,6 +91,9 @@
     <MauiXaml Update="Schedule.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="ShoppingList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="StockList.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

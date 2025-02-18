@@ -52,6 +52,9 @@ namespace IngredientsTracker
             builder.Services.AddTransient<StockList>();
             builder.Services.AddTransient<StockListVM>();
 
+            builder.Services.AddTransient<ShoppingList>();
+            builder.Services.AddTransient<ShoppingListVM>();
+
             // Remove after testing
             //TokenHandler th = new TokenHandler();
             //th.DeleteRefreshToken();
