@@ -35,16 +35,11 @@ namespace IngredientsTracker
             Navigation.PushAsync(schedule);
         }
 
-        //private void ViewAllIngredients(object sender, EventArgs e)
-        //{
-        //    Navigation.PushAsync(new IngredientsList(_db));
-        //}
-
-
-        //private void ViewShoppingList(object sender, EventArgs e)
-        //{
-        //    //Navigation.PushAsync(new ShoppingList(_db));
-        //}
+        private void ViewShoppingList(object sender, EventArgs e)
+        {
+            var shoppingList = App.ServiceProvider.GetService<ShoppingList>();
+            Navigation.PushAsync(shoppingList);
+        }
     }
 
 }

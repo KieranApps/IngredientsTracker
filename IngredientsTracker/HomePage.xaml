@@ -32,16 +32,12 @@
                 Clicked="ViewStock"
                 HorizontalOptions="Fill"
             />
-        <!--
-
-
             <Button 
                 x:Name="ViewShoppingListButton"
                 Text="View Shopping List"
                 SemanticProperties.Hint="View Shopping List"
-                Clicked=""
+                Clicked="ViewShoppingList"
                 HorizontalOptions="Fill"
             />  
--->
     </VerticalStackLayout>
 </ContentPage>

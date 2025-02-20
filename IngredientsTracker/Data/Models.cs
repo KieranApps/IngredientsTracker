@@ -164,4 +164,17 @@ namespace IngredientsTracker.Data
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    public class ShoppingListItem
+    {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Item { get; set; }
+        public int IngredientId { get; set; }
+        public string Amount { get; set; }
+        public int UnitId { get; set; }
+        public string Unit { get; set; }
+    }
+
+
 }
