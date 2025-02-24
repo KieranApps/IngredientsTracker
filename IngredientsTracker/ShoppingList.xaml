@@ -9,20 +9,77 @@
         <viewmodel:ShoppingListVM />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <CollectionView ItemsSource="{Binding Items}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="{Binding Item}"/>
-                        <Entry Text="{Binding Amount}"/>
-                        <Label Text="{Binding Unit}" />
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Label Text="+" />
-        <!-- On click, show in the DatTemplate an invidible entry field for new data, then when submit, add to list, and hide entry -->
-        <!-- Only allow amount to be two way entry -->
-    </StackLayout>
+    <Grid
+        Padding="10"
+        ColumnSpacing="10"
+        RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border 
+            StrokeShape="RoundRectangle 12"
+            StrokeThickness="2"
+            Stroke="LightGray"
+            Padding="0"
+            Grid.Row="0"
+            Grid.ColumnSpan="1"
+            BackgroundColor="#FDFDFD">
+            <CollectionView ItemsSource="{Binding Items}" x:Name="ItemsList" BackgroundColor="Transparent">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="0.2*" />
+                                <ColumnDefinition Width="0.15*" />
+                                <ColumnDefinition Width="0.075*" />
+                                <ColumnDefinition Width="0.075*" />
+                            </Grid.ColumnDefinitions>
+                            <Entry Grid.Column="0" Text="{Binding Item}" IsReadOnly="True">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry"
+                                Binding="{Binding Id}"
+                                Value="0">
+                                        <Setter Property="IsReadOnly" Value="False"/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Entry Grid.Column="1" Text="{Binding Amount}"/>
+                            <Entry Grid.Column="2" Text="{Binding Unit}" IsReadOnly="True"/>
+                            <Entry Grid.Column="3" TextColor="Green"  FontFamily="MaterialIcons" Text="&#xe86c;" IsEnabled="False">
+
+                            </Entry>
+                            <Entry Grid.Column="4" TextColor="Red" FontFamily="MaterialIcons" Text="&#xe872;" IsEnabled="False">
+
+                            </Entry>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
+        <Image
+            Grid.Row="1"
+            Grid.Column="0"
+            WidthRequest="20"
+            HeightRequest="20">
+            <Image.Source>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="&#xe147;"
+                    Size="100"
+                    Color="Blue"
+                />
+            </Image.Source>
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnAddNewTapped" 
+              CommandParameter="{Binding .}"/>
+            </Image.GestureRecognizers>
+        </Image>
+    </Grid>
 </ContentPage>

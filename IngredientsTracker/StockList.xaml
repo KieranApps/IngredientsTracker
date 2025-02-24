@@ -10,9 +10,9 @@
         <viewmodel:StockListVM />
     </ContentPage.BindingContext>
     <Grid
-    Padding="10"
-    ColumnSpacing="10"
-    RowSpacing="10">
+        Padding="10"
+        ColumnSpacing="10"
+        RowSpacing="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

@@ -52,8 +52,10 @@ namespace IngredientsTracker.ViewModels
                     Unit = (string)item["unit"]
                 });
             }
+        }
 
-            // Always add this blank on at the end to allow new items to be added
+        public void AddNewItemToList()
+        {
             Items.Add(new ShoppingListItem());
         }
 
