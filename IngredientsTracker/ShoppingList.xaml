@@ -9,17 +9,20 @@
         <viewmodel:ShoppingListVM />
     </ContentPage.BindingContext>
 
-    <ContentPage.Content>
+    <StackLayout>
         <CollectionView ItemsSource="{Binding Items}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <HorizontalStackLayout Spacing="10">
-                        <Entry Text="{Binding Item}"/>
+                        <Label Text="{Binding Item}"/>
                         <Entry Text="{Binding Amount}"/>
                         <Label Text="{Binding Unit}" />
                     </HorizontalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </ContentPage.Content>
+        <Label Text="+" />
+        <!-- On click, show in the DatTemplate an invidible entry field for new data, then when submit, add to list, and hide entry -->
+        <!-- Only allow amount to be two way entry -->
+    </StackLayout>
 </ContentPage>
