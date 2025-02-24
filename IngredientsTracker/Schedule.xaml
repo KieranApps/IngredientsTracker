@@ -17,9 +17,10 @@
                 <ColumnDefinition Width="0.25*"/>
             </Grid.ColumnDefinitions>
             <Label
+                FontFamily="MaterialIcons"
                 Grid.Column="0"
                 TextColor="Black"
-                Text="&#xef7d;"
+                Text="&#xe5c4;"
                 FontSize="36"
                 HorizontalTextAlignment="End"
             >
@@ -41,9 +42,10 @@
                 </Label.Text>
             </Label>
             <Label
+                FontFamily="MaterialIcons"
                 Grid.Column="2"
                 TextColor="Black"
-                Text="&#xe941;"
+                Text="&#xe5c8;"
                 FontSize="36"
                 HorizontalTextAlignment="Start"
             >
@@ -80,7 +82,7 @@
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
-                        <Label Text="&#xe3c9;" HorizontalOptions="End" FontSize="20" Grid.Row="0" Grid.Column="1">
+                        <Label FontFamily="MaterialIcons" Text="&#xe3c9;" HorizontalOptions="End" FontSize="20" Grid.Row="0" Grid.Column="1">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OpenAssignDishModal" CommandParameter="{Binding .}"/>
                             </Label.GestureRecognizers>

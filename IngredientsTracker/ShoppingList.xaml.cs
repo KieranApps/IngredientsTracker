@@ -20,4 +20,10 @@ public partial class ShoppingList : ContentPage
         Debug.WriteLine("On tap");
         vm.AddNewItemToList();
     }
+
+    private void AddNewItem(object sender, FocusEventArgs e)
+    {
+        Debug.WriteLine("test");
+        // Check binding for ID (ignore and return if ID exists)
+    }
 }

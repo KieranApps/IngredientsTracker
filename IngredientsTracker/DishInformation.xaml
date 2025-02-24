@@ -114,7 +114,7 @@
                             <Label Grid.Column="0" Text="{Binding IngredientName}" Padding="10" />
                             <Label Grid.Column="1" HorizontalTextAlignment="End" Text="{Binding Amount}" Padding="10" />
                             <Label Grid.Column="2" HorizontalTextAlignment="Start" Text="{Binding UnitName}" Padding="10" />
-                            <Label Grid.Column="4" Text="D" Padding="10" />
+                            <Label Grid.Column="4" FontFamily="MaterialIcons" Text="&#xe872;" Padding="10" />
                         </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

@@ -40,11 +40,11 @@
                                 <ColumnDefinition Width="0.075*" />
                                 <ColumnDefinition Width="0.075*" />
                             </Grid.ColumnDefinitions>
-                            <Entry Grid.Column="0" Text="{Binding Item}" IsReadOnly="True">
+                            <Entry Grid.Column="0" Text="{Binding Item}" IsReadOnly="True" Unfocused="AddNewItem">
                                 <Entry.Triggers>
                                     <DataTrigger TargetType="Entry"
-                                Binding="{Binding Id}"
-                                Value="0">
+                                        Binding="{Binding Id}"
+                                        Value="0">
                                         <Setter Property="IsReadOnly" Value="False"/>
                                     </DataTrigger>
                                 </Entry.Triggers>
