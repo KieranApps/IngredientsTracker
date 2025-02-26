@@ -40,7 +40,7 @@
                                 <ColumnDefinition Width="0.075*" />
                                 <ColumnDefinition Width="0.075*" />
                             </Grid.ColumnDefinitions>
-                            <Entry Grid.Column="0" Text="{Binding Item}" IsReadOnly="True" Unfocused="AddNewItem">
+                            <Entry Grid.Column="0" Text="{Binding Item}" IsReadOnly="True" Unfocused="AddNewItem" ReturnCommandParameter="{Binding .}">
                                 <Entry.Triggers>
                                     <DataTrigger TargetType="Entry"
                                         Binding="{Binding Id}"
@@ -54,8 +54,8 @@
                             <Entry Grid.Column="3" TextColor="Green"  FontFamily="MaterialIcons" Text="&#xe86c;" IsEnabled="False">
 
                             </Entry>
-                            <Entry Grid.Column="4" TextColor="Red" FontFamily="MaterialIcons" Text="&#xe872;" IsEnabled="False">
-
+                            <Entry Unfocused="DeleteItem"  Grid.Column="4" TextColor="Red" FontFamily="MaterialIcons" Text="&#xe872;" IsEnabled="False">
+                                
                             </Entry>
 
                         </Grid>

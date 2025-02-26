@@ -167,13 +167,30 @@ namespace IngredientsTracker.Data
 
     public class ShoppingListItem
     {
-        public int Id { get; set; }
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public int UserId { get; set; }
         public string Item { get; set; }
-        public int IngredientId { get; set; }
+        public int? IngredientId { get; set; }
         public string Amount { get; set; }
-        public int UnitId { get; set; }
+        public int? UnitId { get; set; }
         public string Unit { get; set; }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
 

@@ -788,5 +788,99 @@ namespace IngredientsTracker.Helpers
         }
 
 
+        public async Task<string> AddNewItemToShoppingList(ShoppingListItem item)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/shoppinglist/add");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+                var body = new
+                {
+                    user_id,
+                    item = item.Item,
+                    amount = item.Amount
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
+        public async Task<string> EditSHoppingListItem(ShoppingListItem item)
+        {
+            try
+            {
+                string user_id = await _userService.getUserId();
+                Uri uri = new Uri(host + "/shoppinglist/edit");
+                var request = new HttpRequestMessage(HttpMethod.Post, uri);
+
+                string token = await _tokenHandler.GetAccessToken();
+                request.Headers.Add("token", token);
+                var body = new
+                {
+                    id = item.Id,
+                    user_id,
+                    amount = item.Amount
+                };
+                string payload = JsonSerializer.Serialize(body);
+
+                request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode.ToString() == "Unauthorized")
+                    {
+                        var freshRequest = new HttpRequestMessage(HttpMethod.Post, uri);
+                        freshRequest.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+                        response = await RetryRequest(freshRequest);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return "{success: false}";
+                        }
+                    }
+                    else
+                    {
+                        return "{success: false}";
+                    }
+                }
+                string responseData = await response.Content.ReadAsStringAsync();
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                return "{success: false}";
+            }
+        }
+
     }
 }

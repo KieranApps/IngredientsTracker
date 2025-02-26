@@ -1,12 +1,8 @@
 ﻿using IngredientsTracker.Data;
 using IngredientsTracker.Helpers;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace IngredientsTracker.ViewModels
 {
@@ -46,9 +42,9 @@ namespace IngredientsTracker.ViewModels
                     Id = (int)item["id"],
                     UserId = (int)item["user_id"],
                     Item = (string)item["item"],
-                    IngredientId = (int)item["ingredient_id"],
+                    IngredientId = (int?)item["ingredient_id"],
                     Amount = (string)item["amount"],
-                    UnitId = (int)item["unit_id"],
+                    UnitId = (int?)item["unit_id"],
                     Unit = (string)item["unit"]
                 });
             }
@@ -59,11 +55,51 @@ namespace IngredientsTracker.ViewModels
             Items.Add(new ShoppingListItem());
         }
 
-        public async Task <bool> UpdateItem()
+        public async Task AddNewItem(ShoppingListItem item)
+        {
+            // if (!item.Id) Add new else edit
+            if (item.Id > 0)
+            {
+                return;
+            }
+            var itemsExist = Items.Where(x => x.Item == item.Item);
+            if (itemsExist.Count() > 1)
+            {
+                return; // too many, can only have unique item names
+            }
+            // Check if an item with the same item name already exists
+            string response = await _api.AddNewItemToShoppingList(item);
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
+            // Update the collection
+            ShoppingListItem? itemToUpdate = Items.FirstOrDefault(x => x.Item == item.Item); // We know it is unique here because of check above
+            itemToUpdate.Id = (int)responseData["result"];
+        }
+
+        public async Task UpdateItem(ShoppingListItem item)
+        {
+            if (String.IsNullOrEmpty(item.Item))
+            {
+                return;
+            }
+            string response = await _api.EditSHoppingListItem(item);
+            JObject responseData = JObject.Parse(response);
+            bool success = (bool)responseData["success"];
+            if (!success)
+            {
+                // error message
+                return;
+            }
+        }
+
+        public async Task DeleteItem()
         {
 
-            // if (!item.Id) Add new else edit
-            return false;
         }
     }
 }

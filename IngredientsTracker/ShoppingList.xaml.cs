@@ -1,3 +1,4 @@
+using IngredientsTracker.Data;
 using IngredientsTracker.ViewModels;
 using System.Diagnostics;
 
@@ -17,13 +18,19 @@ public partial class ShoppingList : ContentPage
 
     private void OnAddNewTapped(object sender, TappedEventArgs e)
     {
-        Debug.WriteLine("On tap");
         vm.AddNewItemToList();
     }
 
-    private void AddNewItem(object sender, FocusEventArgs e)
+    private async void AddNewItem(object sender, FocusEventArgs e)
     {
-        Debug.WriteLine("test");
+        Entry entry = (Entry)sender;
+        ShoppingListItem item = entry.ReturnCommandParameter as ShoppingListItem;
+        await vm.AddNewItem(item);
         // Check binding for ID (ignore and return if ID exists)
+    }
+
+    private async void DeleteItem(object sender, FocusEventArgs e)
+    {
+        await vm.DeleteItem();
     }
 }
